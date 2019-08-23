@@ -15,13 +15,13 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan("com.admin.apartment.mapper")
 public class MybatisPlusConfig {
 
-//    @Bean
-//    public MapperScannerConfigurer mapperScannerConfigurer(){
-//        MapperScannerConfigurer scannerConfigurer = new MapperScannerConfigurer();
-//        //可以通过环境变量获取你的mapper路径,这样mapper扫描可以通过配置文件配置了
-//        scannerConfigurer.setBasePackage("com.admin.apartment.mapper");
-//        return scannerConfigurer;
-//    }
+    /*@Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(){
+        MapperScannerConfigurer scannerConfigurer = new MapperScannerConfigurer();
+        //可以通过环境变量获取你的mapper路径,这样mapper扫描可以通过配置文件配置了
+        scannerConfigurer.setBasePackage("com.admin.apartment.mapper");
+        return scannerConfigurer;
+    }*/
 
     /**
      * 分页插件

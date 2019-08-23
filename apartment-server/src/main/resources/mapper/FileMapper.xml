@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.apartment.mapper.FileMapper">
+
+    <!--  查询文件信息  -->
+    <select id="selectFileByInfo" parameterType="com.admin.apartment.entity.File" resultType="com.admin.apartment.entity.File">
+        select * from file
+        <where>
+            1=1
+            <if test="t.id != 0">
+                and id=#{t.id}
+            </if>
+            <if test="t.file_name != null">
+                and file_name=#{t.fileName}
+            </if>
+            <if test="t.file_type != null">
+                and file_type=#{t.fileType}
+            </if>
+            <if test="t.belong_to != null">
+                and belong_to=#{t.belongTo}
+            </if>
+        </where>
+    </select>
+
+    <!--  模糊查询文件信息  -->
+    <select id="selectFileByLike" parameterType="com.admin.apartment.entity.File" resultType="com.admin.apartment.entity.File">
+        select * from file
+        <where>
+            1=1
+            <if test="t.file_name != null">
+                and file_name like '%'||#{t.fileName}||'%'
+            </if>
+            <if test="t.file_type != null">
+                and file_type like '%'||#{t.fileType}||'%'
+            </if>
+            <if test="t.belong_to != null">
+                and belong_to in (#{t.belongTo})
+            </if>
+        </where>
+    </select>
+
+</mapper>

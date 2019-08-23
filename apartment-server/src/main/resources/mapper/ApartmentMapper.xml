@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.apartment.mapper.ApartmentMapper">
+
+    <!--  查询租户信息  -->
+    <select id="selectApartmentByInfo" parameterType="com.admin.apartment.entity.Apartment" resultType="com.admin.apartment.entity.Apartment">
+        select * from apartment
+        <where>
+            1=1
+            <if test="t.id != 0">
+                and id=#{t.id}
+            </if>
+            <if test="t.userid != 0">
+                and userid=#{t.userid}
+            </if>
+            <if test="t.house_type != null">
+                and houseType=#{t.houseType}
+            </if>
+            <if test="t.roomArea != null">
+                and roomArea=#{t.roomArea}
+            </if>
+            <if test="t.face != null">
+                and face=#{t.face}
+            </if>
+            <if test="t.price != null">
+                and price=#{t.price}
+            </if>
+            <if test="t.pattern != null">
+                and pattern=#{t.pattern}
+            </if>
+            <if test="t.address != null">
+                and address=#{t.address}
+            </if>
+            <if test="t.status != null">
+                and status=#{t.status}
+            </if>
+            order by createtime desc
+        </where>
+    </select>
+
+    <!--  模糊查询租户信息  -->
+    <select id="selectApartmentByLike" parameterType="com.admin.apartment.model.ApartmentParams" resultType="com.admin.apartment.entity.Apartment">
+        select * from apartment
+        <where>
+            1=1
+            <if test="t.userids != null">
+                and userid in
+                <foreach item="item" index="index" collection="t.userids"
+                          open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.houseTypeSet != null">
+                and houseType in
+                <foreach item="item" index="index" collection="t.houseTypeSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.roomAreaMin != 0">
+                <![CDATA[and roomArea >= #{t.roomAreaMin} ]]>
+            </if>
+            <if test="t.roomAreaMax != 0">
+                <![CDATA[and roomArea <= #{t.roomAreaMax} ]]>
+            </if>
+            <if test="t.faceSet != null">
+                and face in
+                <foreach item="item" index="index" collection="t.faceSet"
+                                               open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.priceMin != 0">
+                <![CDATA[and price >= #{t.priceMin} ]]>
+            </if>
+            <if test="t.priceMax != 0">
+                <![CDATA[and price <= #{t.priceMax} ]]>
+            </if>
+            <if test="t.patternSet != null">
+                and pattern in
+                <foreach item="item" index="index" collection="t.patternSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.address != null">
+                and address like '%${t.address}%'
+            </if>
+            <if test="t.statusSet != null">
+                and status in
+                <foreach item="item" index="index" collection="t.statusSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            order by createtime desc
+        </where>
+    </select>
+
+    <!--  查询所有的支付模式  -->
+    <select id="selectPattern" resultType="java.lang.String">
+        select distinct pattern from apartment where status=1
+    </select>
+
+    <!--  查询所有的户型  -->
+    <select id="selectHouseType" resultType="java.lang.String">
+        select distinct houseType from apartment
+    </select>
+
+    <!--  查询所有的户型  -->
+    <select id="selectFaceList" resultType="java.lang.String">
+        select distinct face from apartment
+    </select>
+
+    <!--  通过 id 删除公寓中租户的信息  -->
+    <update id="deleteUserInfoInApartmentById">
+        update apartment set userid = null and status = 0
+        where id=#{id}
+    </update>
+
+    <!--  查询所有的公寓通过租户的 id  -->
+    <select id="getApartmentListByUserid" resultType="com.admin.apartment.entity.Apartment" parameterType="java.lang.String">
+        select * from apartment where userid=#{userid}
+    </select>
+
+    <!--  查询公寓通过id  -->
+    <select id="selectByApartmentId" resultType="com.admin.apartment.entity.Apartment" parameterType="java.lang.String">
+        select * from apartment where id=#{id}
+    </select>
+</mapper>

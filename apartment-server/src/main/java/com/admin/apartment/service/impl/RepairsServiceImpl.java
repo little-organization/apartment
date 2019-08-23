@@ -55,7 +55,6 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
     @Override
     @Transactional(rollbackFor=Exception.class)
     public boolean  updateRepair(Repairs repairs) {
-        repairs.setConductTime(LocalDateTime.now());
         boolean result = repairsMapper.updateById(repairs)>0;
         return result;
     }

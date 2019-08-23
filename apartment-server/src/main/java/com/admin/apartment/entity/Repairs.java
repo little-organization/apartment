@@ -62,13 +62,12 @@ public class Repairs implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(el = "conductTime, jdbcType=timestamp")
     private LocalDateTime createtime;
 
     /**
      * 处理时间
      */
-    @TableField(el = "conductTime, jdbcType=timestamp", update="now()")
+    @TableField(el = "conductTime, jdbcType=TIMESTAMP", update="now()")
     private LocalDateTime conductTime;
 
     /**

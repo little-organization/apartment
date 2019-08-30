@@ -22,4 +22,11 @@ public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
      * @return
      */
     UmsAdmin selectOneByInfo(UmsAdmin umsAdmin);
+
+    /**
+     * 更新用户登录时间
+     * @param username
+     * @return
+     */
+    int updateByUsername(String username);
 }

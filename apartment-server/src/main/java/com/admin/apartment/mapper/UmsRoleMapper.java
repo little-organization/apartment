@@ -15,7 +15,7 @@ public interface UmsRoleMapper extends BaseMapper<UmsRole> {
     /**
      * 获取 role
      * */
-    @Select("select * from ums_role where admin_id=#{id}")
+    @Select("select * from ums_role where id=#{id}")
     List<UmsRole> selectListByAadminid(long id);
 
 

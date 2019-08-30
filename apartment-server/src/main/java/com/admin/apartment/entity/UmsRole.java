@@ -47,11 +47,6 @@ public class UmsRole implements Serializable {
     private Integer adminCount;
 
     /**
-     * 管理员 id
-     */
-    private Integer adminId;
-
-    /**
      * 创建时间
      */
     private LocalDateTime createTime;

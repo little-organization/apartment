@@ -53,7 +53,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
             //避免返回null，这里返回一个不含有任何值的UmsAdmin对象，在后期的密码比对过程中一样会验证失败
             return new UmsAdmin();
         }
-        List<UmsRole> roles = umsRoleMapper.selectListByAadminid(umsAdmin.getId());
+        List<UmsRole> roles = umsRoleMapper.selectListByAadminid(umsAdmin.getRoleId());
         umsAdmin.setUmsRoles(roles);
         return umsAdmin;
     }
@@ -79,18 +79,14 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
             //获取token
             token = tokenHead+jwtTokenUtil.generateToken(userDetails);
             //给请求头设置 token
-            //ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            //HttpServletRequest request = attributes.getRequest();
-            //request.setAttribute(tokenHeader,token);
-            //updateLoginTimeByUsername(username);
-            //insertLoginLog(username);
+            updateLoginTimeByUsername(umsAdmin.getUsername());
         }
         return token;
     }
 
     @Override
     public UmsAdmin userinfo(String token) {
-        String username = jwtTokenUtil.getUserNameFromToken(token);
+        String username = jwtTokenUtil.getUserNameFromToken(token.substring(this.tokenHead.length()));
         UmsAdmin umsAdmin =  umsAdminMapper.selectOneByInfo(new UmsAdmin(username));
         List<UmsRole> roles = umsRoleMapper.selectListByAadminid(umsAdmin.getId());
         umsAdmin.setUmsRoles(roles);
@@ -103,4 +99,10 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         UmsAdmin umsAdmin =  umsAdminMapper.selectOneByInfo(new UmsAdmin(username));
         return umsAdmin==null?false:true;
     }
+
+    public boolean updateLoginTimeByUsername(String username) {
+
+        return umsAdminMapper.updateByUsername(username)>0;
+    }
+
 }

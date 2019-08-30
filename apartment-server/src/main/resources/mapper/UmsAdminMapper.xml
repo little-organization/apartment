@@ -18,4 +18,11 @@
         </where>
     </select>
 
+    <!--  通过 Username 更改用户最近登录时间  -->
+    <update id="updateByUsername" parameterType="java.lang.String">
+        update ums_admin set login_time = now()
+        where username=#{username}
+    </update>
+
+
 </mapper>

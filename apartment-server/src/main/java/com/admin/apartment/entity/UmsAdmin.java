@@ -69,17 +69,37 @@ public class UmsAdmin implements Serializable, UserDetails {
     private Integer status;
 
     /**
+     * 联系电话
+     */
+    private String phone;
+
+
+    /**
+     * 角色 id
+     */
+    private long roleId;
+
+    /**
      * 权限
      */
     @TableField(exist = false)
     private List<UmsRole> umsRoles;
 
+    /**
+     * 权限
+     */
+    @TableField(exist = false)
+    private List<String> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<String> strings = new ArrayList<>();
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (UmsRole role : umsRoles) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+            strings.add(role.getName());
         }
+        this.roles = strings;
         return authorities;
     }
 

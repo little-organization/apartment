@@ -29,6 +29,7 @@
           :key="passwordType"
           ref="password"
           v-model="loginForm.password"
+          :prefix-icon="el-icon-search"
           :type="passwordType"
           placeholder="密码"
           name="password"

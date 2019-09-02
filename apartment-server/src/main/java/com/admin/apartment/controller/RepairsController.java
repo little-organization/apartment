@@ -3,6 +3,7 @@ package com.admin.apartment.controller;
 
 import com.admin.apartment.common.CommonResult;
 import com.admin.apartment.entity.Apartment;
+import com.admin.apartment.entity.File;
 import com.admin.apartment.entity.Repairs;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
@@ -10,12 +11,9 @@ import com.admin.apartment.model.RepairsParams;
 import com.admin.apartment.service.IRepairsService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -64,5 +62,14 @@ public class RepairsController {
         return CommonResult.success(result);
     }
 
+    /**
+     * 新增报修信息
+     * */
+    @RequestMapping(value = "/insertRepairAndFile",method = RequestMethod.POST)
+    public @ResponseBody
+    CommonResult insertRepairAndFile(@RequestBody Repairs repair){
+        boolean result = iRepairsService.insertRepairAndFile(repair);
+        return CommonResult.success(result);
+    }
 
 }

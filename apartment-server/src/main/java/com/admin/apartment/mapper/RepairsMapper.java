@@ -35,4 +35,11 @@ public interface RepairsMapper extends BaseMapper<Repairs> {
      * 获取所有状态列表
      * */
     List<String> selectStatusList();
+
+    /**
+     * 新增一条数据返回 id
+     * */
+    int insertRepairAndFile(Repairs repair);
+
+
 }

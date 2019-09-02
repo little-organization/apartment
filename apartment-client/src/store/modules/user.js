@@ -1,13 +1,15 @@
 import { login, logout, getInfo } from '@/api/user'
 import { setToken, getToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import router, { resetRouter } from '@/router'
 import avatarAdmin from '@/assets/tou.gif'
 
 const state = {
   token: getToken(),
   isLoading: false,
   name: '',
-  avatar: ''
+  avatar: '',
+  id: '',
+  roles: []
 }
 
 const mutations = {
@@ -17,11 +19,17 @@ const mutations = {
   SET_NAME: (state, name) => {
     state.name = name
   },
+  SET_ID: (state, id) => {
+    state.id = id
+  },
   SET_ISLoading: (state, isLoading) => {
     state.isLoading = isLoading
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -46,13 +54,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-        if (!data) {
-          reject('未授权,请重新登录.')
-        }
-        const { username } = data
-
+        const { roles, username, id } = data
+        console.log(roles)
         commit('SET_NAME', username)
+        commit('SET_ID', id)
         commit('SET_AVATAR', avatarAdmin)
+        commit('SET_ROLES', roles)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -65,6 +72,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_NAME', '')
+        commit('SET_ID', '')
+        commit('SET_ROLES', [])
         removeToken()
         resetRouter()
         resolve()
@@ -78,7 +88,33 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
       removeToken()
+      resolve()
+    })
+  },
+
+  // dynamically modify permissions
+  changeRoles({ commit, dispatch }, role) {
+    return new Promise(async resolve => {
+      const token = role + '-token'
+
+      commit('SET_TOKEN', token)
+      setToken(token)
+
+      const { roles } = await dispatch('getInfo')
+
+      resetRouter()
+
+      // 据角色生成可访问的路线图
+      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
+
+      // 动态添加可访问路由
+      router.addRoutes(accessRoutes)
+
+      // 重置已访问的视图和缓存的视图
+      dispatch('tagsView/delAllViews', null, { root: true })
+
       resolve()
     })
   }

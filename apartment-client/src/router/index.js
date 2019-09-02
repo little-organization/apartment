@@ -27,8 +27,7 @@ import Layout from '@/layout'
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * 没有权限要求的基页可以访问所有角色
  */
 export const constantRoutes = [
   {
@@ -44,6 +43,12 @@ export const constantRoutes = [
   },
 
   {
+    path: '/repair',
+    component: () => import('@/views/reportrepair/repair'),
+    hidden: true
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -53,8 +58,14 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
+  }
+]
 
+/**
+ * asyncRoutes
+ * 需要根据用户角色动态加载的路由
+ */
+export const asyncRoutes = [
   {
     path: '/doorlock',
     component: Layout,
@@ -63,7 +74,7 @@ export const constantRoutes = [
       path: 'doorlock',
       name: '门锁管理',
       component: () => import('@/views/doorlock/index'),
-      meta: { title: '门锁管理', icon: 'lock' }
+      meta: { title: '门锁管理', icon: 'lock', roles: ['系统管理员'] }
     }]
   },
 
@@ -75,7 +86,7 @@ export const constantRoutes = [
       path: 'apartment',
       name: '公寓管理',
       component: () => import('@/views/apartment/index'),
-      meta: { title: '公寓管理', icon: 'home' }
+      meta: { title: '公寓管理', icon: 'home', roles: ['系统管理员'] }
     }]
   },
 
@@ -87,19 +98,7 @@ export const constantRoutes = [
       path: 'leaseholder',
       name: '租户管理',
       component: () => import('@/views/leaseholder/index'),
-      meta: { title: '租户管理', icon: 'peoples' }
-    }]
-  },
-
-  {
-    path: '/reportrepair',
-    component: Layout,
-    redirect: '/reportrepair',
-    children: [{
-      path: 'reportrepair',
-      name: '报修管理',
-      component: () => import('@/views/reportrepair/index'),
-      meta: { title: '报修管理', icon: 'form' }
+      meta: { title: '租户管理', icon: 'peoples', roles: ['系统管理员'] }
     }]
   },
 
@@ -111,126 +110,27 @@ export const constantRoutes = [
       path: 'check',
       name: '视频查看',
       component: () => import('@/views/components-demo/videoplayer'),
-      meta: { title: '视频查看', icon: 'form' }
+      meta: { title: '视频查看', icon: 'form', roles: ['系统管理员'] }
     }]
   },
 
   {
-    path: '/example',
+    path: '/reportrepair',
     component: Layout,
-    redirect: '/example/table',
-    name: '示例',
-    meta: { title: '示例', icon: 'example' },
-    hidden: true,
-    children: [
-      {
-        path: 'table',
-        name: '表格',
-        component: () => import('@/views/table/index'),
-        hidden: true,
-        meta: { title: '表格', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: '树',
-        component: () => import('@/views/tree/index'),
-        hidden: true,
-        meta: { title: '树', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form表单',
-        component: () => import('@/views/form/index'),
-        hidden: true,
-        meta: { title: 'Form表单', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: '菜单示例',
-    hidden: true,
-    meta: {
-      title: '菜单示例',
-      icon: 'nested'
+    redirect: '/reportrepair',
+    meta: { title: '报修管理', icon: 'form' },
+    children: [{
+      path: 'reportrepair',
+      name: '报修管理',
+      component: () => import('@/views/reportrepair/index'),
+      meta: { title: '报修信息', icon: 'form', roles: ['系统管理员'] }
     },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        hidden: true,
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            hidden: true,
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            hidden: true,
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                hidden: true,
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                hidden: true,
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            hidden: true,
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        hidden: true,
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '开发文档外部链接', icon: 'link' },
-        hidden: true
-      }
-    ]
+    {
+      path: 'repair',
+      name: '报修单',
+      component: () => import('@/views/reportrepair/repair'),
+      meta: { title: '报修单', icon: 'form', roles: ['租户'] }
+    }]
   },
 
   // 404 page must be placed at the end !!!

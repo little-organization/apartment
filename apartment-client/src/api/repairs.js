@@ -29,9 +29,9 @@ export function updateRepair(params) {
   })
 }
 
-export function deleteApartment(id) {
+export function apartmentListByUserid(id) {
   return request({
-    url: '/apartment/deleteApartment',
+    url: '/apartment/getApartmentListByUserid',
     method: 'post',
     data: id,
     headers: {
@@ -40,11 +40,32 @@ export function deleteApartment(id) {
   })
 }
 
-export function apartmentListByUserid(id) {
+export function delImage(fileName) {
   return request({
-    url: '/apartment/getApartmentListByUserid',
+    url: '/file/delImage/' + fileName,
+    method: 'get'
+  })
+}
+
+export function getImages(id) {
+  return request({
+    url: '/file/getImages/' + id,
+    method: 'get'
+  })
+}
+
+export function image(imageName) {
+  return request({
+    url: '/file/image/' + imageName,
+    method: 'get'
+  })
+}
+
+export function addRepairAndFile(repair) {
+  return request({
+    url: '/repairs/insertRepairAndFile',
     method: 'post',
-    data: id,
+    data: repair,
     headers: {
       'Content-Type': 'application/json'
     }

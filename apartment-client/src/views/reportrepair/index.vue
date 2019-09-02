@@ -46,8 +46,8 @@
       </el-table-column>
       <el-table-column label="报修文件" prop="hasFile" column-key="hasFile" width="110px" align="center" :filter-multiple="false" :filter-method="filterHasFile" :filters="hasFileList" filter-placement="bottom-end">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="light" :content="scope.row.hasFile === 1 ? '点击查看报修文件' : '' " placement="top">
-            <el-button :disabled="scope.row.hasFile === 0" :type="scope.row.hasFile === 1 ? 'success' : 'info'" size="mini" close-transition @click="handleFileData(scope.row)">{{ scope.row.hasFile===0 ? '无文件' : '有文件' }}</el-button>
+          <el-tooltip class="item" effect="light" :content="scope.row.hasFile === 1 ? '' : '点击查看报修文件' " placement="top">
+            <el-button :disabled="scope.row.hasFile === 0" :type="scope.row.hasFile === 1 ? 'info' : 'success'" size="mini" close-transition @click="watchFileData(scope.row)">{{ scope.row.hasFile===0 ? '无文件' : '有文件' }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -186,7 +186,7 @@
 </template>
 
 <script>
-import { fetchList, statusList, updateRepair } from '@/api/repairs'
+import { fetchList, statusList, updateRepair, getImages, image } from '@/api/repairs'
 import { apartmentById } from '@/api/apartment'
 import { userInfoById } from '@/api/apartmentuser'
 import waves from '@/directive/waves' // waves directive
@@ -207,7 +207,7 @@ export default {
       createtimeLimit: null,
       updatetimeLimit: null,
       userListLoading: false,
-      images: ['https://picsum.photos/500/500', 'https://picsum.photos/500/300', 'https://picsum.photos/500/200', 'https://picsum.photos/250/500', 'https://picsum.photos/500/200', 'https://picsum.photos/250/500'],
+      images: [],
       userinfo: {
         id: null,
         name: null,
@@ -402,17 +402,30 @@ export default {
       this.dialogStatus = 'apartmentWatch'
       this.temp = Object.assign({}, row) // copy obj
       this.dialogApartmentVisible = true
-      apartmentById(this.temp.userid).then(response => {
+      apartmentById(this.temp.apartmentid).then(response => {
         this.apartmentinfo = response.data
       })
     },
-    handleFileData(row) {
+    watchFileData(row) {
+      if (row.id === this.temp.id && this.images.length > 0) {
+        this.dialogStatus = 'fileWatch'
+        this.dialogFileVisible = true
+        return
+      }
+      this.images = []
       this.dialogStatus = 'fileWatch'
       this.temp = Object.assign({}, row) // copy obj
-      this.dialogFileVisible = true
-      apartmentById(this.temp).then(response => {
-        this.apartmentinfo = response.data
+      getImages(this.temp.id).then(response => {
+        const files = response.data
+        for (const v of files) {
+          image(v.resource).then(response => {
+            if (response.data) {
+              this.images.push('data:image/' + v.getFileType + ';base64,' + response.message)
+            }
+          })
+        }
       })
+      this.dialogFileVisible = true
     },
     // handleDownload() {
     //   this.downloadLoading = true
@@ -491,7 +504,9 @@ export default {
     width: 50%;
   }
   .avatar {
-    width: 178px;
-    height: 178px;
+    width: 168px;
+    height: 168px;
+    margin: 0px 4px 4px 4px;
+    border-radius: 6px;
   }
 </style>

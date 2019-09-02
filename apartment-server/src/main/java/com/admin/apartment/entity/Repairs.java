@@ -3,6 +3,7 @@ package com.admin.apartment.entity;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -73,7 +74,10 @@ public class Repairs implements Serializable {
     /**
      * 是否有文件 0=>没有 1=>有
      */
-    private Integer hasFile;
+    private Integer hasfile;
+
+    @TableField(exist = false)
+    private List<File> fileListSave;
 
 
 }

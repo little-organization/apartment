@@ -28,9 +28,14 @@ public class File implements Serializable {
     private long id;
 
     /**
-     * 文件名字
+     * 租户名称
      */
-    private String fileName;
+    private String username;
+
+    /**
+     * 租户 id
+     */
+    private String userid;
 
     /**
      * 文件地址
@@ -43,9 +48,9 @@ public class File implements Serializable {
     private String fileType;
 
     /**
-     * 所属表id
+     * 所属维修表id
      */
-    private String belongTo;
+    private long repairsid;
 
 
 }

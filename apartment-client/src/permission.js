@@ -32,17 +32,29 @@ router.beforeEach(async(to, from, next) => {
       if (hasGetUserInfo) {
         next()
       } else {
-        try {
-          // get user info
-          await store.dispatch('user/getInfo')
-
+        // 确定用户是否通过getInfo获取了他的权限角色
+        const hasRoles = store.getters.roles && store.getters.roles.length > 0
+        if (hasRoles) {
           next()
-        } catch (error) {
-          // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
+        } else {
+          try {
+            // get user info
+            // 注意：角色必须是对象数组！例如：['admin']或['developer'，'editor']
+            const { roles } = await store.dispatch('user/getInfo')
+            // 基于角色的可访问路线图
+            const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+            // 动态添加可访问路由
+            router.addRoutes(accessRoutes)
+            // hack method to ensure that addRoutes is complete
+            // 设置replace：true，因此导航不会留下历史记录
+            next({ ...to, replace: true })
+          } catch (error) {
+            // remove token and go to login page to re-login
+            await store.dispatch('user/resetToken')
+            Message.error(error || 'Has Error')
+            next(`/login?redirect=${to.path}`)
+            NProgress.done()
+          }
         }
       }
     }

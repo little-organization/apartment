@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.apartment.mapper.FileMapper">
 
+    <!--  批量插入文件  -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into file (`username`, `resource`, `filetype`, `repairsid`, `userid`)
+         VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.username},
+            #{item.resource},
+            #{item.fileType},
+            #{item.repairsid},
+            #{item.userid}
+            )
+        </foreach>
+    </insert>
+
     <!--  查询文件信息  -->
     <select id="selectFileByInfo" parameterType="com.admin.apartment.entity.File" resultType="com.admin.apartment.entity.File">
         select * from file
@@ -11,13 +26,13 @@
                 and id=#{t.id}
             </if>
             <if test="t.file_name != null">
-                and file_name=#{t.fileName}
+                and username=#{t.username}
             </if>
             <if test="t.file_type != null">
-                and file_type=#{t.fileType}
+                and filetype=#{t.fileType}
             </if>
             <if test="t.belong_to != null">
-                and belong_to=#{t.belongTo}
+                and repairsid=#{t.repairsid}
             </if>
         </where>
     </select>
@@ -28,15 +43,20 @@
         <where>
             1=1
             <if test="t.file_name != null">
-                and file_name like '%'||#{t.fileName}||'%'
+                and username like '%'||#{t.username}||'%'
             </if>
             <if test="t.file_type != null">
-                and file_type like '%'||#{t.fileType}||'%'
+                and filetype like '%'||#{t.fileType}||'%'
             </if>
             <if test="t.belong_to != null">
-                and belong_to in (#{t.belongTo})
+                and repairsid in (#{t.repairsid})
             </if>
         </where>
+    </select>
+
+    <!--  通过维修单 id 查找文件  -->
+    <select id="selectByRepairsId" resultType="com.admin.apartment.entity.File" parameterType="java.lang.Long">
+        select * from file where repairsid = #{repairsid}
     </select>
 
 </mapper>

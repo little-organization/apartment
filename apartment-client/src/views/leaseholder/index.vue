@@ -73,6 +73,9 @@
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="deleteDate(row)">
             删除
           </el-button>
+          <el-button size="mini" type="info" @click="pushMessage(row)">
+            下发账号
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

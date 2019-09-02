@@ -1,22 +1,40 @@
 package com.admin.apartment.utils;
 
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.ibatis.javassist.runtime.Inner;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import java.io.*;
+import java.net.SocketException;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * @author liangming
+ */
 @Component
+@Scope("request")
 public class FileUtil {
+
+    private static final Log LOGGER = LogFactory.get();
 
     @Value("${upload.ftpIp}")
     private String FTP_IP;
@@ -60,6 +78,124 @@ public class FileUtil {
             return false;
         }
         return flag;
+    }
+
+    /**
+     * 图片不剪裁
+     * @param file
+     * @param fileName
+     * @return
+     */
+    public boolean notCutImage(MultipartFile file,String fileName){
+        boolean flag = false;
+        try {
+            InputStream inputStream =  new ByteArrayInputStream(file.getBytes());
+            flag = ftpUpload(inputStream,fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    /**
+     * 读取图片转 base64
+     * @param fileName
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public String download(String fileName) {
+        InputStream is = null;
+        ByteArrayOutputStream bos = null;
+        FTPClient ftpClient = new FTPClient();
+        try {
+            //服务器地址和端口
+            ftpClient.connect(FTP_IP,FTP_PORT);
+            //登录的用户名和密码
+            ftpClient.login(FTP_NAME,FTP_PWS);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+            }
+            // 获取远程ftp上指定文件的InputStream
+            is = ftpClient.retrieveFileStream(FTP_BASEPATH+"/"+fileName);
+            if (null == is) {
+                throw new FileNotFoundException(FTP_BASEPATH+"/"+fileName);
+            }
+            bos = new ByteArrayOutputStream();
+            int length;
+            byte[] buf = new byte[2048];
+            while (-1 != (length = is.read(buf, 0, buf.length))) {
+                bos.write(buf, 0, length);
+            }
+            ByteArrayInputStream fis = new ByteArrayInputStream(
+                    bos.toByteArray());
+            bos.flush();
+            is.close();
+            bos.close();
+            byte[] buffer = new byte[fis.available()];
+            int offset = 0;
+            int numRead = 0;
+            while (offset < buffer.length && (numRead = fis.read(buffer, offset, buffer.length - offset)) >= 0) {
+                offset += numRead;
+            }
+            if (offset != buffer.length) {
+                throw new IOException("Could not completely read file ");
+            }
+            fis.close();
+            BASE64Encoder encoder = new BASE64Encoder();
+            String imgStr = encoder.encode(buffer);
+            return imgStr;     //超长的
+        } catch (Exception e) {
+            LOGGER.error("ftp通过文件名称获取远程文件流", e);
+        } finally {
+            try {
+                is.close();
+                bos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 删除图片
+     * @param dir
+     * @param fileName
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean del(String fileName,String dir) {
+        FTPClient ftpClient = new FTPClient();
+        try {
+            //服务器地址和端口
+            ftpClient.connect(FTP_IP,FTP_PORT);
+            //登录的用户名和密码
+            ftpClient.login(FTP_NAME,FTP_PWS);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+            }
+            ftpClient.changeWorkingDirectory(dir);
+            // 删除
+            ftpClient.sendCommand("dele " + fileName + "\r\n");
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                ftpClient.disconnect();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 
     /**
@@ -139,8 +275,8 @@ public class FileUtil {
             ftp.makeDirectory(FTP_BASEPATH);
             ftp.changeWorkingDirectory(FTP_BASEPATH);
             flag = ftp.deleteFile(FileName);
-            //System.out.println(ftp.getReplyCode()); //250 表示删除成功
-            //System.out.println(flag);  //flag==true 表示成功
+            System.out.println(ftp.getReplyCode()); //250 表示删除成功
+            System.out.println(flag);  //flag==true 表示成功
             ftp.logout();
         } catch (IOException e) {
             e.printStackTrace();

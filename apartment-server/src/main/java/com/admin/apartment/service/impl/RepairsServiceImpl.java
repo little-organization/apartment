@@ -1,8 +1,10 @@
 package com.admin.apartment.service.impl;
 
 import com.admin.apartment.entity.Apartment;
+import com.admin.apartment.entity.File;
 import com.admin.apartment.entity.Repairs;
 import com.admin.apartment.entity.User;
+import com.admin.apartment.mapper.FileMapper;
 import com.admin.apartment.mapper.RepairsMapper;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
@@ -36,6 +38,9 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
     @Autowired
     RepairsMapper repairsMapper;
 
+    @Autowired
+    FileMapper fileMapper;
+
     @Override
     public Page<Repairs> selectRepairsByLike(RepairsParams params) {
         //当前页数，查询的最大个数
@@ -59,4 +64,24 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
         return result;
     }
 
+    @Override
+    @Transactional(rollbackFor=Exception.class)
+    public boolean insertRepairAndFile(Repairs repair) {
+        // 新增维修单
+        if(repair.getFileListSave().size()>0){
+            repair.setHasfile(1);
+        }
+        repair.setStatus("未修理");
+        boolean result = repairsMapper.insertRepairAndFile(repair)>0;
+        // 新增文件
+        List<File> files = repair.getFileListSave();
+        boolean flag = true;
+        if(files.size()>0) {
+            for (File file : files) {
+                file.setRepairsid(repair.getId());
+            }
+            flag = fileMapper.insertBatch(files);
+        }
+        return result && flag;
+    }
 }

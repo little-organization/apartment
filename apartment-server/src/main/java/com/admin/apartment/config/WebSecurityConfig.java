@@ -3,6 +3,7 @@ package com.admin.apartment.config;
 import com.admin.apartment.service.IUmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import javax.servlet.MultipartConfigElement;
 
 /**
  *
@@ -118,8 +121,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         bean.setOrder(0);
         return new CorsFilter(source);
     }
-
-
-
 
 }

@@ -1,12 +1,14 @@
 package com.admin.apartment.service;
 
 import com.admin.apartment.entity.Apartment;
+import com.admin.apartment.entity.File;
 import com.admin.apartment.entity.Repairs;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
 import com.admin.apartment.model.RepairsParams;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -35,6 +37,8 @@ public interface IRepairsService extends IService<Repairs> {
      * */
     boolean updateRepair(Repairs repairs);
 
-
-
+    /**
+     * 新增报修信息
+     * */
+    boolean insertRepairAndFile( Repairs repair);
 }

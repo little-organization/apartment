@@ -140,7 +140,7 @@ export const asyncRoutes = [
     children: [{
       path: 'messageTemplate',
       name: '短信模板',
-      component: () => import('@/views/components-demo/videoplayer'),
+      component: () => import('@/views/message/index'),
       meta: { title: '短信模板', icon: 'message', roles: ['系统管理员'] }
     }]
   },

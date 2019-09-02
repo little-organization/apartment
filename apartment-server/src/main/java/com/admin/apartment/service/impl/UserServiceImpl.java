@@ -78,7 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(insert){
             UmsAdmin umsAdmin= new UmsAdmin();
             umsAdmin.setUsername(user.getName());
-            umsAdmin.setPassword(String.valueOf(user.hashCode()));
+            umsAdmin.setPassword(user.getIdNumber().substring(user.getIdNumber().length()-6));
             // 添加后的租户直接启用账户
             umsAdmin.setStatus(1);
             umsAdmin.setPhone(user.getPhone());
@@ -114,5 +114,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         List<FiltersTag> tags = ApartmentServiceImpl.changeTagList(list);
         return tags;
     }
-
 }

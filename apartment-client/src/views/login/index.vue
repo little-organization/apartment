@@ -46,7 +46,7 @@
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span> password: 如果您是租户，您首次登陆的密码是您的身份证号后六位</span>
       </div>
 
     </el-form>

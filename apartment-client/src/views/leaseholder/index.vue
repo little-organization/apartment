@@ -32,13 +32,13 @@
       style="width: 100%;"
       @filter-change="filterHanderChange"
     >
-      <el-table-column label="ID" type="index" align="center" width="70" />
-      <el-table-column label="姓名" prop="name" column-key="name" width="110px" align="center">
+      <el-table-column label="ID" type="index" align="center" />
+      <el-table-column label="姓名" prop="name" column-key="name" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="性别" prop="sex" column-key="sex" width="100px" align="center" :filter-multiple="false" :filter-method="filterSex" :filters="sexList" filter-placement="bottom-end">
+      <el-table-column label="性别" prop="sex" column-key="sex" align="center" :filter-multiple="false" :filter-method="filterSex" :filters="sexList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tag :type="scope.row.sex === 1 ? 'success' : ''" close-transition>{{ scope.row.sex ===1 ? '男' : '女' }}</el-tag>
         </template>
@@ -48,7 +48,7 @@
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="证件类型" prop="idType" column-key="idType" width="110px" align="center" :filter-method="filterIdType" :filters="idTypeList" filter-placement="bottom-end">
+      <el-table-column label="证件类型" prop="idType" column-key="idType" align="center" :filter-method="filterIdType" :filters="idTypeList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tag type="success" close-transition>{{ scope.row.idType }}</el-tag>
         </template>
@@ -58,23 +58,20 @@
           <span>{{ scope.row.idNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="isLive" column-key="isLive" width="110px" align="center" :filter-multiple="false" :filter-method="filterIsLive" :filters="isLiveList" filter-placement="bottom-end">
+      <el-table-column label="状态" prop="isLive" column-key="isLive" align="center" :filter-multiple="false" :filter-method="filterIsLive" :filters="isLiveList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.isLive === 1 ? '点击查看入住信息' : '未入住' " placement="right">
             <el-button :disabled="scope.row.isLive === 0" :type="scope.row.isLive === 1 ? 'success' : 'info'" size="mini" close-transition @click="handleApartmentData(scope.row)">{{ scope.row.isLive===1 ? '已入住' : '未入住' }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
           <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="deleteDate(row)">
             删除
-          </el-button>
-          <el-button size="mini" type="info" @click="pushMessage(row)">
-            下发账号
           </el-button>
         </template>
       </el-table-column>
@@ -184,7 +181,7 @@ export default {
       listLoading: false,
       listQuery: {
         page: 1,
-        limit: 5,
+        limit: 10,
         id: null,
         name: null,
         sexSet: null,

@@ -203,7 +203,11 @@ export default {
         { text: '有文件', value: 1 },
         { text: '无文件', value: 0 }
       ],
-      statusList: null,
+      statusList: [
+        { text: '未修理', value: '未修理' },
+        { text: '进行中', value: '进行中' },
+        { text: '已完成', value: '已完成' }
+      ],
       createtimeLimit: null,
       updatetimeLimit: null,
       userListLoading: false,
@@ -320,15 +324,28 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.records
         this.total = response.data.total
-        console.log(this.list)
         this.listLoading = false
       })
     },
     // 获取修理状态所有类型
     getStatusList() {
       statusList().then(response => {
-        this.statusList = response.data
+        this.statusList = this.union(response.data, this.statusList)
       })
+    },
+    union(listA, listB) {
+      var n = 0
+      for (let i = 0; i < listA.length; i++) {
+        for (let j = 0; j < listB.length; j++) {
+          if (listA[i].value === listB[j].value) {
+            n = 1
+          }
+        }
+        if (n !== 1) {
+          listB.push(listA[i])
+        }
+      }
+      return listB
     },
     // 过滤参数的改变
     handleFilter() {

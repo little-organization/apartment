@@ -118,18 +118,30 @@ export const asyncRoutes = [
     path: '/reportrepair',
     component: Layout,
     redirect: '/reportrepair',
-    meta: { title: '报修管理', icon: 'form' },
+    meta: { title: '报修管理', icon: 'clipboard' },
     children: [{
       path: 'reportrepair',
       name: '报修管理',
       component: () => import('@/views/reportrepair/index'),
-      meta: { title: '报修信息', icon: 'form', roles: ['系统管理员'] }
+      meta: { title: '报修信息', icon: 'education', roles: ['系统管理员'] }
     },
     {
       path: 'repair',
       name: '报修单',
       component: () => import('@/views/reportrepair/repair'),
       meta: { title: '报修单', icon: 'form', roles: ['租户'] }
+    }]
+  },
+
+  {
+    path: '/messageTemplate',
+    component: Layout,
+    redirect: '/messageTemplate',
+    children: [{
+      path: 'messageTemplate',
+      name: '短信模板',
+      component: () => import('@/views/components-demo/videoplayer'),
+      meta: { title: '短信模板', icon: 'message', roles: ['系统管理员'] }
     }]
   },
 

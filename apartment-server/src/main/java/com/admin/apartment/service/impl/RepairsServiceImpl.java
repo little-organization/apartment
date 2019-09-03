@@ -1,10 +1,10 @@
 package com.admin.apartment.service.impl;
 
-import com.admin.apartment.entity.Apartment;
-import com.admin.apartment.entity.File;
-import com.admin.apartment.entity.Repairs;
-import com.admin.apartment.entity.User;
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
+import com.admin.apartment.entity.*;
 import com.admin.apartment.mapper.FileMapper;
+import com.admin.apartment.mapper.RepairsLogMapper;
 import com.admin.apartment.mapper.RepairsMapper;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
@@ -35,8 +35,13 @@ import java.util.List;
 @Service
 public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> implements IRepairsService {
 
+    private static final Log LOGGER = LogFactory.get();
+
     @Autowired
     RepairsMapper repairsMapper;
+
+    @Autowired
+    RepairsLogMapper repairsLogMapper;
 
     @Autowired
     FileMapper fileMapper;
@@ -60,7 +65,12 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
     @Override
     @Transactional(rollbackFor=Exception.class)
     public boolean  updateRepair(Repairs repairs) {
+        repairs.setConductTime(LocalDateTime.now());
         boolean result = repairsMapper.updateById(repairs)>0;
+        // 记录维修日志
+        if (result){
+            repairsLogMapper.insertLog(repairs);
+        }
         return result;
     }
 
@@ -81,6 +91,10 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
                 file.setRepairsid(repair.getId());
             }
             flag = fileMapper.insertBatch(files);
+        }
+        // 记录维修日志
+        if (result){
+            repairsLogMapper.insertLog(repair);
         }
         return result && flag;
     }

@@ -83,7 +83,7 @@ public class SmsTemplateServiceImpl implements ISmsTemplateService {
         CommonRequest request = messageUtil.commonRequest();
         request.setAction(params.getAction());
         request.putQueryParameter("RegionId", RegionId);
-        // 模板 code
+        // 模板 code 测试模板 SMS_173245372
         request.putQueryParameter("TemplateCode", params.getTemplateCode());
         CommonResponse response =  messageUtil.commonResponse(request);
         return JSONObject.parseObject(response.getData(), SmsTemplateQueryResponse.class);

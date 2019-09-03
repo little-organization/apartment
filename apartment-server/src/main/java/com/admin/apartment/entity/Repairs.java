@@ -74,10 +74,8 @@ public class Repairs implements Serializable {
     /**
      * 是否有文件 0=>没有 1=>有
      */
-    private Integer hasfile;
+    private int hasfile;
 
     @TableField(exist = false)
     private List<File> fileListSave;
-
-
 }

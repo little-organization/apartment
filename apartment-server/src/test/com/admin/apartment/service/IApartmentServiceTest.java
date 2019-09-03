@@ -1,5 +1,6 @@
 package com.admin.apartment.service;
 
+import com.admin.apartment.entity.Apartment;
 import com.admin.apartment.model.FiltersTag;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,12 @@ public class IApartmentServiceTest {
     @Test
     public void testPattrern() {
         List<FiltersTag> list = iApartmentService.selectPattern();
+        System.out.println(list);
+    }
+
+    @Test
+    public void testUserid() {
+        List<Apartment> list = iApartmentService.getApartmentListByUserid(2);
         System.out.println(list);
     }
 }

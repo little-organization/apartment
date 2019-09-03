@@ -99,8 +99,8 @@ public class UserController {
      * */
     @RequestMapping(value = "/deleteUserById",method = RequestMethod.POST)
     public @ResponseBody
-    CommonResult deleteUserById(@RequestBody String id){
-        boolean result = iUserService.deleteUserById(id);
+    CommonResult deleteUserById(@RequestBody User user){
+        boolean result = iUserService.deleteUserById(user);
         return CommonResult.success(result);
     }
 

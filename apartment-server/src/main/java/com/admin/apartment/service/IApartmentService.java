@@ -53,22 +53,22 @@ public interface IApartmentService extends IService<Apartment> {
     /**
      * 删除公寓信息
      * */
-    boolean deleteApartment(String id);
+    boolean deleteApartment(Apartment apartment);
 
     /**
      * 移除公寓中的租户信息设置为未出租
      * */
-    boolean deleteUserInfoInApartmentById(String id);
+    boolean deleteUserInfoInApartmentById(long id);
 
     /**
      * 通过租户 id 查询租户租用的公寓
      * */
-    List<Apartment> getApartmentListByUserid(String userid);
+    List<Apartment> getApartmentListByUserid(long userid);
 
     /**
      * 通过id 查询公寓
      * */
-    Apartment getApartmentById(String id);
+    Apartment getApartmentById(long id);
 
 
 

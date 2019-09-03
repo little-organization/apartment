@@ -4,13 +4,14 @@
 
     <!--  批量插入文件  -->
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into file (`username`, `resource`, `filetype`, `repairsid`, `userid`)
+        insert into file (`username`, `resource`, `filetype`, `filename`, `repairsid`, `userid`)
          VALUES
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.username},
             #{item.resource},
             #{item.fileType},
+            #{item.filename},
             #{item.repairsid},
             #{item.userid}
             )

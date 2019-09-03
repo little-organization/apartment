@@ -6,6 +6,7 @@ import cn.hutool.log.level.Level;
 import com.admin.apartment.entity.Apartment;
 import com.admin.apartment.entity.UmsAdmin;
 import com.admin.apartment.entity.User;
+import com.admin.apartment.mapper.ApartmentMapper;
 import com.admin.apartment.mapper.UmsAdminMapper;
 import com.admin.apartment.mapper.UserMapper;
 import com.admin.apartment.model.ApartmentParams;
@@ -53,6 +54,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     ISendMessageService iSendMessageService;
 
+    @Autowired
+    ApartmentMapper apartmentMapper;
+
 
     @Override
     public Page<User> selectUserByInfo(IPage<User> userIPage) {
@@ -94,8 +98,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean deleteUserById(String id) {
-        return userMapper.deleteById(id)>0;
+    @Transactional(rollbackFor=Exception.class)
+    public boolean deleteUserById(User user) {
+        boolean result = userMapper.deleteById(user.getId())>0;
+        if(result){
+            List<Apartment> list = apartmentMapper.getApartmentListByUserid(user.getId());
+            if(list.size()>=1){
+                for (int i = 0; i <list.size() ; i++) {
+                    list.get(i).setUserid(0);
+                    apartmentMapper.updateById(list.get(i));
+                }
+            }
+        }
+        return result;
     }
 
     @Override

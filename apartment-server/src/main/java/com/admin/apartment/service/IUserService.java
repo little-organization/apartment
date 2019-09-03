@@ -44,7 +44,7 @@ public interface IUserService extends IService<User> {
     /**
      * 删除用户信息
      * */
-    boolean deleteUserById(String id);
+    boolean deleteUserById(User user);
 
     /**
      * 查询用户信息通过 id

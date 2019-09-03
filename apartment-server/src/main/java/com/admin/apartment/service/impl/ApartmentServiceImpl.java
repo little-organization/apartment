@@ -102,27 +102,33 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
     }
 
     @Override
-    public boolean deleteApartment(String id) {
+    @Transactional(rollbackFor=Exception.class)
+    public boolean deleteApartment(Apartment apartment) {
         //获取数据户型 List
-        boolean result = apartmentMapper.deleteById(id)>0;
+        boolean result = apartmentMapper.deleteById(apartment.getId())>0;
+        if (result && apartment.getUserid()!=0) {
+            List<Apartment> apartment1 = apartmentMapper.getApartmentListByUserid(apartment.getUserid());
+            if (apartment1.size()==1 ){
+                userMapper.updateUserStatusById(apartment.getUserid(),0);
+            }
+        }
         return result;
     }
 
     @Override
-    public boolean deleteUserInfoInApartmentById(String id) {
-        //获取数据户型 List
+    public boolean deleteUserInfoInApartmentById(long id) {
         boolean result = apartmentMapper.deleteUserInfoInApartmentById(id)>0;
         return result;
     }
 
     @Override
-    public List<Apartment> getApartmentListByUserid(String userid) {
+    public List<Apartment> getApartmentListByUserid(long userid) {
         List<Apartment> apartmentList = apartmentMapper.getApartmentListByUserid(userid);
         return apartmentList;
     }
 
     @Override
-    public Apartment getApartmentById(String id) {
+    public Apartment getApartmentById(long id) {
         Apartment apartment = apartmentMapper.selectByApartmentId(id);
         return apartment;
     }

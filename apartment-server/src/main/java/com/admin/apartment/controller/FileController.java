@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,6 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/apartment/file")
-@Scope("request")
 public class FileController {
 
     @Value("${upload.ftppath}")
@@ -53,6 +54,7 @@ public class FileController {
      */
     @RequestMapping(value = "/baseUpload", method = RequestMethod.POST)
     @ResponseBody
+    @Scope("request")
     public CommonResult upload(@RequestParam("file") MultipartFile file){
         if (file!=null) {
             String fileName = file.getOriginalFilename();
@@ -60,7 +62,8 @@ public class FileController {
             String newName = FileUtil.getFileName(fileName);
             Map<String,String> map = new HashMap<>();
             map.put("suffix",suffix);
-            map.put("name",newName);
+            map.put("resource",FTP_BASEPATH+"/"+newName);
+            map.put("filename",newName);
             // 剪裁图片，目前用不到
             if (fileUtil.notCutImage(file, newName)) {
                 //图访问路径，返回到前端，提及form表单保存时将访问路径保存到数据库
@@ -85,14 +88,14 @@ public class FileController {
     }
 
     /**
-     *
+     * 获取图片的 base64 编码
      * @param image
      * @return
      */
-    @RequestMapping(value = "/image/{image}", method = RequestMethod.GET)
+    @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ResponseBody
     @Cacheable
-    public CommonResult image(@PathVariable("image") String image){
+    public CommonResult image(@RequestBody String image){
         String imgStr = null;
         if (image!=null) {
             imgStr = fileUtil.download(image);
@@ -101,7 +104,7 @@ public class FileController {
     }
 
     /**
-     *
+     * 获取文件列表
      * @param id
      * @return
      */
@@ -111,4 +114,23 @@ public class FileController {
         List<File> list = iFileService.listselectByRepairsId(id);
         return CommonResult.success(list);
     }
+
+
+    @Value("${server.port}")
+    private String port;
+
+    /**
+     * 获取本服务器的 ip 地址
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getHostAddress", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult getHostAddress() throws UnknownHostException {
+        InetAddress address = InetAddress.getLocalHost();
+        String upLoadUrl = "http://"+address.getHostAddress()+":"+port+"/apartment/file/baseUpload";
+        return CommonResult.success(upLoadUrl);
+    }
+
+
 }

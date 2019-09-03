@@ -5,6 +5,7 @@ import com.admin.apartment.entity.UmsAdmin;
 import com.admin.apartment.model.message.*;
 import com.admin.apartment.service.IQuerySendDetailsService;
 import com.admin.apartment.service.ISendMessageService;
+import com.admin.apartment.service.ISmsSignService;
 import com.admin.apartment.service.ISmsTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class MessageController {
 
     @Autowired
     ISmsTemplateService iSmsTemplateService;
+
+    @Autowired
+    ISmsSignService iSmsSignService;
 
     /**
      * 发送短信
@@ -79,6 +83,26 @@ public class MessageController {
     public @ResponseBody
     CommonResult querySmsTemplate(@RequestBody QuerySmsTemplateParams params){
         SmsTemplateQueryResponse response = iSmsTemplateService.querySmsTemplate(params);
+        return CommonResult.success(response);
+    }
+
+    /**
+     * 删除签名
+     * */
+    @RequestMapping(value = "/deleteSmsSign",method = RequestMethod.POST)
+    public @ResponseBody
+    CommonResult deleteSmsSign(@RequestBody DelSmsSignParams params){
+        QueryDelSmsSignResponse response = iSmsSignService.deleteSmsSign(params);
+        return CommonResult.success(response);
+    }
+
+    /**
+     * 查询签名
+     * */
+    @RequestMapping(value = "/querySmsSign",method = RequestMethod.POST)
+    public @ResponseBody
+    CommonResult querySmsSign(@RequestBody QuerySmsSignParams params){
+        QueryDelSmsSignResponse response = iSmsSignService.querySmsSign(params);
         return CommonResult.success(response);
     }
 

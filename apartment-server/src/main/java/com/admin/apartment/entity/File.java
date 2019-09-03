@@ -48,6 +48,11 @@ public class File implements Serializable {
     private String fileType;
 
     /**
+     * 文件名称
+     */
+    private String filename;
+
+    /**
      * 所属维修表id
      */
     private long repairsid;

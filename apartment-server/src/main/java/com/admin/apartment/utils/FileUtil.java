@@ -31,7 +31,6 @@ import java.time.LocalTime;
  * @author liangming
  */
 @Component
-@Scope("request")
 public class FileUtil {
 
     private static final Log LOGGER = LogFactory.get();
@@ -118,9 +117,9 @@ public class FileUtil {
                 ftpClient.disconnect();
             }
             // 获取远程ftp上指定文件的InputStream
-            is = ftpClient.retrieveFileStream(FTP_BASEPATH+"/"+fileName);
+            is = ftpClient.retrieveFileStream(fileName);
             if (null == is) {
-                throw new FileNotFoundException(FTP_BASEPATH+"/"+fileName);
+                throw new FileNotFoundException(fileName);
             }
             bos = new ByteArrayOutputStream();
             int length;

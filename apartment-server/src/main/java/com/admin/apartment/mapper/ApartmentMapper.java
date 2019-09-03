@@ -49,16 +49,16 @@ public interface ApartmentMapper extends BaseMapper<Apartment> {
     /**
      * 移除公寓中的租户信息设置为未出租
      * */
-    int deleteUserInfoInApartmentById(@Param("id") String id);
+    int deleteUserInfoInApartmentById(@Param("id") long id);
 
     /**
      * 通过租户 id 查询租户租用的公寓
      * */
-    List<Apartment> getApartmentListByUserid(@Param("userid") String userid);
+    List<Apartment> getApartmentListByUserid(@Param("userid") long userid);
 
     /**
      * 通过租户 id 查询租户租用的公寓
      * */
-    Apartment selectByApartmentId(@Param("id") String id);
+    Apartment selectByApartmentId(@Param("id") long id);
 
 }

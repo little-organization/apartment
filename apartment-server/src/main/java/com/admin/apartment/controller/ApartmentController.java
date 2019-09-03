@@ -45,9 +45,9 @@ public class ApartmentController {
     /**
      * 通过租户 id 查询租户租用的公寓
      * */
-    @RequestMapping(value = "/getApartmentListByUserid",method = RequestMethod.POST)
+    @RequestMapping(value = "/getApartmentListByUserid/{userid}",method = RequestMethod.GET)
     public @ResponseBody
-    CommonResult getApartmentListByUserid(@RequestBody String userid){
+    CommonResult getApartmentListByUserid(@PathVariable("userid") long userid){
         List<Apartment> apartmentList= iApartmentService.getApartmentListByUserid(userid);
         return CommonResult.success(apartmentList);
     }
@@ -107,17 +107,17 @@ public class ApartmentController {
      * */
     @RequestMapping(value = "/deleteApartment",method = RequestMethod.POST)
     public @ResponseBody
-    CommonResult deleteApartment(@RequestBody String id){
-        boolean result = iApartmentService.deleteApartment(id);
+    CommonResult deleteApartment(@RequestBody Apartment apartment){
+        boolean result = iApartmentService.deleteApartment(apartment);
         return CommonResult.success(result);
     }
 
     /**
      * 移除公寓中的租户信息设置为未出租
      * */
-    @RequestMapping(value = "/deleteApartmentUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteApartmentUser/{id}",method = RequestMethod.GET)
     public @ResponseBody
-    CommonResult deleteUserInfoInApartmentById(@RequestBody String id){
+    CommonResult deleteUserInfoInApartmentById(@PathVariable("id") long id){
         boolean result = iApartmentService.deleteUserInfoInApartmentById(id);
         return CommonResult.success(result);
     }
@@ -125,9 +125,9 @@ public class ApartmentController {
     /**
      * 通过id 查询公寓
      * */
-    @RequestMapping(value = "/getApartmentById",method = RequestMethod.POST)
+    @RequestMapping(value = "/getApartmentById/{id}",method = RequestMethod.GET)
     public @ResponseBody
-    CommonResult getApartmentById(@RequestBody String id){
+    CommonResult getApartmentById(@PathVariable("id") long id){
         Apartment apartment= iApartmentService.getApartmentById(id);
         return CommonResult.success(apartment);
     }

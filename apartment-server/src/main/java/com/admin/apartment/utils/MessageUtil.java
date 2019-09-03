@@ -22,8 +22,6 @@ public class MessageUtil {
     @Value("${aliyun.RegionId}")
     private String RegionId;
 
-    private DefaultProfile profile = DefaultProfile.getProfile(RegionId, accessKeyId, accessSecret);
-    IAcsClient client = new DefaultAcsClient(profile);
     /**
      * 短信发送公共参数添加
      * */
@@ -32,6 +30,7 @@ public class MessageUtil {
         request.setMethod(MethodType.POST);
         request.setDomain("dysmsapi.aliyuncs.com");
         request.setVersion("2017-05-25");
+        request.putQueryParameter("AccessKeyId",accessKeyId);
         return request;
     }
 
@@ -39,6 +38,8 @@ public class MessageUtil {
      * 短信发送公共请求方法
      * */
     public CommonResponse commonResponse(CommonRequest request) {
+        DefaultProfile profile = DefaultProfile.getProfile(RegionId, accessKeyId, accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
         CommonResponse response = null;
         try {
             response = client.getCommonResponse(request);

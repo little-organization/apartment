@@ -33,6 +33,9 @@ public interface FileMapper extends BaseMapper<File> {
      * */
     boolean insertBatch(List<File> files);
 
+    /**
+     * 通过维修单 id 查询多有图片
+     * */
     List<File> selectByRepairsId(long repairsid);
 
 }

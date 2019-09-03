@@ -54,11 +54,11 @@ export function updateApartment(params) {
   })
 }
 
-export function deleteApartment(id) {
+export function deleteApartment(params) {
   return request({
     url: '/apartment/deleteApartment',
     method: 'post',
-    data: id,
+    data: params,
     headers: {
       'Content-Type': 'application/json'
     }
@@ -66,24 +66,17 @@ export function deleteApartment(id) {
 }
 
 export function apartmentListByUserid(id) {
+  console.log(id)
   return request({
-    url: '/apartment/getApartmentListByUserid',
-    method: 'post',
-    data: id,
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    url: '/apartment/getApartmentListByUserid/' + id,
+    method: 'get'
   })
 }
 
 export function apartmentById(id) {
   return request({
-    url: '/apartment/getApartmentById',
-    method: 'post',
-    data: id,
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    url: '/apartment/getApartmentById/' + id,
+    method: 'get'
   })
 }
 

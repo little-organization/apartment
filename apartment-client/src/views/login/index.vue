@@ -29,7 +29,6 @@
           :key="passwordType"
           ref="password"
           v-model="loginForm.password"
-          :prefix-icon="el-icon-search"
           :type="passwordType"
           placeholder="密码"
           name="password"
@@ -45,8 +44,7 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: 如果您是租户，您首次登陆的密码是您的身份证号后六位</span>
+        <span>如果您不是管理员，您首次登陆的密码是您的身份证号后六位</span>
       </div>
 
     </el-form>

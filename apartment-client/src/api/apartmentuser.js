@@ -40,11 +40,11 @@ export function idTypeList() {
   })
 }
 
-export function deleteUserById(id) {
+export function deleteUserById(params) {
   return request({
     url: '/user/deleteUserById',
     method: 'post',
-    data: id,
+    data: params,
     headers: {
       'Content-Type': 'application/json'
     }

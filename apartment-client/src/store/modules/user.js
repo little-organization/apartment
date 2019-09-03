@@ -55,7 +55,6 @@ const actions = {
       getInfo(state.token).then(response => {
         const { data } = response
         const { roles, username, id } = data
-        console.log(roles)
         commit('SET_NAME', username)
         commit('SET_ID', id)
         commit('SET_AVATAR', avatarAdmin)

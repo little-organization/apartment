@@ -27,27 +27,26 @@
       <el-table-column label="报修人" prop="username" width="110px" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" content="点击查看租户信息" placement="top">
-            <el-button type="success" size="mini" close-transition @click="watchUserData(scope.row)">{{ scope.row.username }}</el-button>
+            <el-button type="text" size="mini" close-transition @click="watchUserData(scope.row)">{{ scope.row.username }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="报修描述内容" prop="content" width="200px" align="center">
+      <el-table-column label="报修描述内容" prop="content" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.content }}</span>
         </template>
       </el-table-column>
       <el-table-column label="报修公寓地址" prop="apartmentAddress" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.apartmentAddress }}</span>
           <el-tooltip class="item" effect="light" content="点击查看公寓信息" placement="top">
-            <el-button type="success" size="mini" close-transition @click="watchApartmentData(scope.row)">查看</el-button>
+            <el-button type="text" size="mini" close-transition @click="watchApartmentData(scope.row)"><span>{{ scope.row.apartmentAddress }}</span></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="报修文件" prop="hasFile" column-key="hasFile" width="110px" align="center" :filter-multiple="false" :filter-method="filterHasFile" :filters="hasFileList" filter-placement="bottom-end">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="light" :content="scope.row.hasFile === 1 ? '' : '点击查看报修文件' " placement="top">
-            <el-button :disabled="scope.row.hasFile === 0" :type="scope.row.hasFile === 1 ? 'info' : 'success'" size="mini" close-transition @click="watchFileData(scope.row)">{{ scope.row.hasFile===0 ? '无文件' : '有文件' }}</el-button>
+          <el-tooltip class="item" effect="light" :content="scope.row.hasfile === 0 ? '' : '点击查看报修文件' " placement="top">
+            <el-button :disabled="scope.row.hasfile !== 1" :type="scope.row.hasfile === 0 ? 'info' : 'success'" size="mini" close-transition @click="watchFileData(scope.row)">{{ scope.row.hasfile===1 ? '有文件' : '无文件' }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -89,7 +88,7 @@
         <el-button @click="dialogStatusVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="updateRepairStatusData()">
+        <el-button :disabled="confirmUpdate" type="primary" @click="updateRepairStatusData()">
           确认修改
         </el-button>
       </div>
@@ -211,6 +210,7 @@ export default {
       createtimeLimit: null,
       updatetimeLimit: null,
       userListLoading: false,
+      confirmUpdate: false,
       images: [],
       userinfo: {
         id: null,
@@ -263,10 +263,8 @@ export default {
       dialogStatus: '',
       textMap: {
         userWatch: '查看租户信息',
-        apartmentWatch: '修改公寓租户信息',
-        fileWatch: '查看报修文件',
-        update: '修改公寓信息',
-        create: '添加公寓信息'
+        apartmentWatch: '查看公寓租户信息',
+        fileWatch: '查看报修文件'
       },
       dialogUserVisible: false,
       dialogApartmentVisible: false,
@@ -379,13 +377,14 @@ export default {
     },
     // 执行更改维修状态方法
     updateRepairStatusData() {
+      this.confirmUpdate = true
       updateRepair(this.temp).then((response) => {
-        this.temp.conductTime = new Date()
         const result = response.data
         if (result) {
           for (const v of this.list) {
             if (v.id === this.temp.id) {
               const index = this.list.indexOf(v)
+              this.temp.conductTime = new Date()
               this.list.splice(index, 1, this.temp)
               break
             }
@@ -406,6 +405,7 @@ export default {
           })
         }
       })
+      this.confirmUpdate = false
     },
     watchUserData(row) {
       this.dialogStatus = 'userWatch'

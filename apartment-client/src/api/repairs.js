@@ -54,10 +54,18 @@ export function getImages(id) {
   })
 }
 
-export function image(imageName) {
+export function getHostAddress() {
   return request({
-    url: '/file/image/' + imageName,
+    url: '/file/getHostAddress',
     method: 'get'
+  })
+}
+
+export function image(image) {
+  return request({
+    url: '/file/image',
+    data: image,
+    method: 'post'
   })
 }
 

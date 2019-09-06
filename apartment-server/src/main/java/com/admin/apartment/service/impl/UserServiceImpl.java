@@ -86,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // 添加后的租户直接启用账户
             umsAdmin.setStatus(1);
             umsAdmin.setPhone(user.getPhone());
-            umsAdmin.setNote("租户");
+            umsAdmin.setRoleNote("租户");
             insert = umsAdminMapper.insert(umsAdmin)>0;
         }
         return insert;

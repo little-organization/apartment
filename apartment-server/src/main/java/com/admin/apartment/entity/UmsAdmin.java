@@ -51,7 +51,7 @@ public class UmsAdmin implements Serializable, UserDetails {
     /**
      * 备注信息
      */
-    private String note;
+    private String roleNote;
 
     /**
      * 创建时间

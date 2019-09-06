@@ -15,6 +15,7 @@
             <if test="password != null">
                 and password=#{password}
             </if>
+            and status = 1
         </where>
     </select>
 

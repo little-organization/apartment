@@ -41,12 +41,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-    @Cacheable
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UmsAdmin umsAdmin = umsAdminMapper.selectOneByInfo(new UmsAdmin(username));

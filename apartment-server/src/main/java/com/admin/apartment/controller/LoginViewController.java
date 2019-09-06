@@ -20,11 +20,6 @@ public class LoginViewController {
     @Autowired
     IUmsAdminService iUmsAdminService;
 
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     /**
      * 登录
      * */

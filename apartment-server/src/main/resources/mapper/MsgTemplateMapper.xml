@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.apartment.mapper.MsgTemplateMapper">
+
+    <!--  模糊查询模板信息  -->
+    <select id="selectSignByTemplateCode" parameterType="com.admin.apartment.model.message.QuerySmsTemplateParams" resultType="com.admin.apartment.entity.MsgTemplate">
+        select * from msg_template
+        <where>
+            1=1
+            <if test="t.TemplateCode != null">
+                and TemplateCode like '%${t.TemplateCode}%' or TemplateName like '%${t.TemplateCode}%'
+            </if>
+            order by CreateDate desc
+        </where>
+    </select>
+
+    <select id="selectTemplateByTemplateStatus" resultType="com.admin.apartment.entity.MsgTemplate">
+        select * from msg_template where TemplateStatus != 1 or TemplateStatus is null
+    </select>
+
+    <select id="selectTemplateCodeAndNameList" resultType="com.admin.apartment.entity.MsgTemplate">
+        select * from msg_template
+    </select>
+</mapper>

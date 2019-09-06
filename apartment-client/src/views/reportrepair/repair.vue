@@ -301,6 +301,7 @@ export default {
     handlePictureError(err, file, fileList) {
       this.$message.error(err)
     },
+    // 上传成功的回调
     handlePictureSuccess(response, file, fileList) {
       if (response.message === 'true') {
         file.name = response.data.name
@@ -317,6 +318,7 @@ export default {
         this.submitClick = true
       }
     },
+    // 上传前的图片处理
     beforeAvatarUpload(param) {
       const isJPG = (param.type.indexOf('image') >= 0)
       if (!isJPG) {
@@ -325,13 +327,13 @@ export default {
       }
       // 对图片进行压缩
       const imgSize = param.size / 1024 / 1024
-      var quarity = 0.33
+      var quarity = 0.23
       if (imgSize > 20) {
-        quarity = 0.3
+        quarity = 0.2
       } else if (imgSize > 10 && imgSize < 20) {
-        quarity = 0.31
+        quarity = 0.21
       } else if (imgSize > 5 && imgSize < 10) {
-        quarity = 0.32
+        quarity = 0.22
       }
       const _this = this
       if (imgSize > 1) {

@@ -29,6 +29,8 @@ import java.time.LocalTime;
 
 /**
  * @author liangming
+ *
+ * (已废弃)
  */
 @Component
 public class FileUtil {

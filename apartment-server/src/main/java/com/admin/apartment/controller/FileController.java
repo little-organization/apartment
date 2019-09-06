@@ -3,11 +3,8 @@ package com.admin.apartment.controller;
 
 import com.admin.apartment.common.CommonResult;
 import com.admin.apartment.entity.File;
-import com.admin.apartment.mapper.FileMapper;
-import com.admin.apartment.model.Fileparams;
 import com.admin.apartment.service.IFileService;
-import com.admin.apartment.utils.FileUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.admin.apartment.utils.OSSUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -37,11 +32,11 @@ import java.util.Map;
 @RequestMapping("/apartment/file")
 public class FileController {
 
-    @Value("${upload.ftppath}")
-    private String FTP_BASEPATH;
+    @Value("${aliyun.firstKey}")
+    private static String firstKey;
 
     @Autowired
-    FileUtil fileUtil;
+    OSSUploadUtils ossUploadUtils;
 
     @Autowired
     IFileService iFileService;
@@ -59,13 +54,13 @@ public class FileController {
         if (file!=null) {
             String fileName = file.getOriginalFilename();
             String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-            String newName = FileUtil.getFileName(fileName);
+            String newName = ossUploadUtils.getFileName(fileName);
             Map<String,String> map = new HashMap<>();
             map.put("suffix",suffix);
-            map.put("resource",FTP_BASEPATH+"/"+newName);
+            map.put("resource",firstKey+"/"+newName);
             map.put("filename",newName);
             // 剪裁图片，目前用不到
-            if (fileUtil.notCutImage(file, newName)) {
+            if (ossUploadUtils.uploadImage(file, newName)) {
                 //图访问路径，返回到前端，提及form表单保存时将访问路径保存到数据库
                 return CommonResult.success(map,"true");
             } else {
@@ -83,7 +78,7 @@ public class FileController {
     @RequestMapping(value = "/delImage/{fileName}", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult delImage(@PathVariable("fileName") String fileName){
-        boolean result = fileUtil.deleteFile(FileUtil.getFile(fileName));
+        boolean result = ossUploadUtils.delImage(fileName);
         return CommonResult.success(result, null);
     }
 
@@ -98,7 +93,7 @@ public class FileController {
     public CommonResult image(@RequestBody String image){
         String imgStr = null;
         if (image!=null) {
-            imgStr = fileUtil.download(image);
+            imgStr = ossUploadUtils.downloadImage(image);
         }
         return CommonResult.success(imgStr!=null,imgStr);
     }

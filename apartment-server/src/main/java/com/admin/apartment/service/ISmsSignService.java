@@ -1,5 +1,6 @@
 package com.admin.apartment.service;
 
+import com.admin.apartment.entity.MsgSign;
 import com.admin.apartment.model.message.*;
 
 public interface ISmsSignService {
@@ -12,5 +13,5 @@ public interface ISmsSignService {
     /**
      * 查询签名
      * */
-    QueryDelSmsSignResponse querySmsSign(QuerySmsSignParams params);
+    MsgSign querySmsSign(QuerySmsSignParams params);
 }

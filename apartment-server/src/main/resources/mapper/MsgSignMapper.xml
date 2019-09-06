@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.apartment.mapper.MsgSignMapper">
+
+    <!--  模糊查询签名信息  -->
+    <select id="selectSignBySignName" parameterType="com.admin.apartment.model.message.QuerySmsSignParams" resultType="com.admin.apartment.entity.MsgSign">
+        select * from msg_sign
+        <where>
+            1=1
+            <if test="t.SignName != null">
+                and SignName like '%${t.SignName}%'
+            </if>
+            order by CreateDate desc
+        </where>
+    </select>
+
+    <select id="selectSignBySignStatus" resultType="com.admin.apartment.entity.MsgSign">
+        select * from msg_sign where SignStatus != 1 or SignStatus is null
+    </select>
+
+</mapper>

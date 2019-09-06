@@ -1,5 +1,6 @@
 package com.admin.apartment.service;
 
+import com.admin.apartment.entity.MsgTemplate;
 import com.admin.apartment.model.message.*;
 import com.aliyuncs.CommonResponse;
 
@@ -18,10 +19,10 @@ public interface ISmsTemplateService {
     /**
      * 修改模板
      * */
-    public SmsTemplateResponse modifySmsTemplate(ModifySmsTemplateParams params);
+    public MsgTemplate modifySmsTemplate(MsgTemplate params);
 
     /**
      * 查询模板
      * */
-    public SmsTemplateQueryResponse querySmsTemplate(QuerySmsTemplateParams params);
+    public MsgTemplate querySmsTemplate(QuerySmsTemplateParams params);
 }

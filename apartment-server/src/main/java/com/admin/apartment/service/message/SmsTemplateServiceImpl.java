@@ -1,5 +1,6 @@
 package com.admin.apartment.service.message;
 
+import com.admin.apartment.entity.MsgTemplate;
 import com.admin.apartment.model.message.*;
 import com.admin.apartment.service.ISmsTemplateService;
 import com.admin.apartment.utils.MessageUtil;
@@ -57,12 +58,12 @@ public class SmsTemplateServiceImpl implements ISmsTemplateService {
      * 修改模板
      * */
     @Override
-    public SmsTemplateResponse modifySmsTemplate(ModifySmsTemplateParams params) {
+    public MsgTemplate modifySmsTemplate(MsgTemplate params) {
         CommonRequest request = messageUtil.commonRequest();
-        request.setAction(params.getAction());
+        request.setAction("ModifySmsTemplate");
         request.putQueryParameter("RegionId", RegionId);
         // 短信号码
-        request.putQueryParameter("TemplateType", params.getTemplateType());
+        request.putQueryParameter("TemplateType", String.valueOf(params.getTemplateType()));
         // 签名
         request.putQueryParameter("TemplateName", params.getTemplateName());
         // 模板 code
@@ -70,22 +71,22 @@ public class SmsTemplateServiceImpl implements ISmsTemplateService {
         // 模板 ID
         request.putQueryParameter("TemplateContent", params.getTemplateContent());
         // 模板参数
-        request.putQueryParameter("Remark", params.getRemark());
+        request.putQueryParameter("Remark", "对【"+params.getTemplateName()+"】更改一下模板名称");
         CommonResponse response =  messageUtil.commonResponse(request);
-        return JSONObject.parseObject(response.getData(), SmsTemplateResponse.class);
+        return JSONObject.parseObject(response.getData(), MsgTemplate.class);
     }
 
     /**
      * 查询模板
      * */
     @Override
-    public SmsTemplateQueryResponse querySmsTemplate(QuerySmsTemplateParams params) {
+    public MsgTemplate querySmsTemplate(QuerySmsTemplateParams params) {
         CommonRequest request = messageUtil.commonRequest();
         request.setAction(params.getAction());
         request.putQueryParameter("RegionId", RegionId);
         // 模板 code 测试模板 SMS_173245372
         request.putQueryParameter("TemplateCode", params.getTemplateCode());
         CommonResponse response =  messageUtil.commonResponse(request);
-        return JSONObject.parseObject(response.getData(), SmsTemplateQueryResponse.class);
+        return JSONObject.parseObject(response.getData(), MsgTemplate.class);
     }
 }

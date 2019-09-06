@@ -75,6 +75,19 @@ export function validatePhone(rule, value, callback) {
     }
   }
 }
+/* 是否手机号码2*/
+export function validatePhoneOther(value) {
+  const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+  if (value === '' || value === undefined || value === null) {
+    return false
+  } else {
+    if ((!reg.test(value)) && value !== '') {
+      return false
+    } else {
+      return true
+    }
+  }
+}
 /* 是否身份证号码*/
 export function validateIdNo(rule, value, callback) {
   const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/

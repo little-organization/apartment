@@ -1,5 +1,6 @@
 package com.admin.apartment.service.message;
 
+import com.admin.apartment.entity.MsgSign;
 import com.admin.apartment.model.message.DelSmsSignParams;
 import com.admin.apartment.model.message.QuerySmsSignParams;
 import com.admin.apartment.model.message.QueryDelSmsSignResponse;
@@ -33,13 +34,13 @@ public class SmsSignServiceImpl implements ISmsSignService {
     }
 
     @Override
-    public QueryDelSmsSignResponse querySmsSign(QuerySmsSignParams params) {
+    public MsgSign querySmsSign(QuerySmsSignParams params) {
         CommonRequest request = messageUtil.commonRequest();
         request.setAction(params.getAction());
         request.putQueryParameter("RegionId", RegionId);
         // 签名
         request.putQueryParameter("SignName", params.getSignName());
         CommonResponse response =  messageUtil.commonResponse(request);
-        return JSONObject.parseObject(response.getData(), QueryDelSmsSignResponse.class);
+        return JSONObject.parseObject(response.getData(), MsgSign.class);
     }
 }

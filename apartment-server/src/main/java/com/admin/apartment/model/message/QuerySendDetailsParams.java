@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,7 +39,7 @@ public class QuerySendDetailsParams {
      *
      * 格式为yyyyMMdd，例如20181225。
      * */
-    private String SendDate;
+    private Date SendDate;
 
     /**
      * 主账号AccessKey的ID，即Key。

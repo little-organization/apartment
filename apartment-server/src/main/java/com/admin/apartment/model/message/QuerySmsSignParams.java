@@ -10,6 +10,15 @@ import lombok.Setter;
 public class QuerySmsSignParams {
 
     /**
+     * 页数（阿里短信平台接口没有此参数）
+     * */
+    private Integer page;
+    /**
+     * 每页多少条（阿里短信平台接口没有此参数）
+     * */
+    private Integer limit;
+
+    /**
      * 签名名称。
      * */
     private String SignName;
@@ -23,4 +32,8 @@ public class QuerySmsSignParams {
      * 系统规定参数。取值：QuerySmsSign。
      * */
     private String Action = "QuerySmsSign";
+
+    public QuerySmsSignParams(String signName) {
+        SignName = signName;
+    }
 }

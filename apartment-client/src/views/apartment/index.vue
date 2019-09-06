@@ -451,6 +451,13 @@ export default {
                 duration: 2000
               })
             }
+          }).catch(() => {
+            this.$notify({
+              title: '失败',
+              message: '添加异常',
+              type: 'error',
+              duration: 2000
+            })
           })
         }
       })

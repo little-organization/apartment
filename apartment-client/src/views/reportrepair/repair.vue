@@ -266,6 +266,7 @@ export default {
         } else {
           this.loading = false
           this.$message({ type: 'warning', message: '请检查必填项！' })
+          return false
         }
       })
     },

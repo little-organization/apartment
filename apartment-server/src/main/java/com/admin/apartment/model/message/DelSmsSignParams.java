@@ -26,4 +26,8 @@ public class DelSmsSignParams {
      * 系统规定参数。取值：DeleteSmsSign。
      * */
     private String Action = "DeleteSmsSign";
+
+    public DelSmsSignParams(String signName) {
+        SignName = signName;
+    }
 }

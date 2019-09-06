@@ -21,9 +21,6 @@ public class SendMessageServiceImpl implements ISendMessageService {
     @Value("${aliyun.RegionId}")
     private String RegionId;
 
-    @Value("${aliyun.SignName}")
-    private String SignName;
-
     /**
      * 单个短信发送
      * */
@@ -54,11 +51,11 @@ public class SendMessageServiceImpl implements ISendMessageService {
         // 短信号码
         request.putQueryParameter("PhoneNumberJson", params.getPhoneNumberJson());
         // 签名
-        request.putQueryParameter("SignNameJson",SignName);
+        request.putQueryParameter("SignNameJson",params.getSignNameJson());
         // 模板 ID
         request.putQueryParameter("TemplateCode", params.getTemplateCode());
         // 模板参数
-        request.putQueryParameter("TemplateParamJson", params.getTemplateParamJson());
+        request.putQueryParameter("TemplateParamJson", params.getTemplateParamJson()==null?"[\"\"]":params.getTemplateParamJson());
         CommonResponse response =  messageUtil.commonResponse(request);
         return JSONObject.parseObject(response.getData(), SendSmsResponse.class);
     }

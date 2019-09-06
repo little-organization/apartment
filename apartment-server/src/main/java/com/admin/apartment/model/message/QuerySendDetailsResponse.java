@@ -14,7 +14,7 @@ public class QuerySendDetailsResponse extends BaseResponse{
     /**
      * 短信发送总条数。
      * */
-    private String TotalCount;
+    private Integer TotalCount;
 
     /**
      * 短信发送总条数。

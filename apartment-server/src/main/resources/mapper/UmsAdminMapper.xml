@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.admin.apartment.mapper.UmsAdminMapper">
 
+<!--    添加管理员-->
+    <insert id="insertReturnId" parameterType="com.admin.apartment.model.UmsAdminParams" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `ums_admin` (`username`, `password`, `phone`, `roleId`, `roleNote`, `status`, `createTime`)
+         VALUES (#{username}, #{password}, #{phone},  #{roleId}, #{roleNote}, #{status}, now())
+    </insert>
+
+    <delete id="deleteByRepairId" parameterType="java.lang.Long">
+        delete from ums_admin where repairId=#{repairId}
+    </delete>
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+        delete from ums_admin where userId=#{userId}
+    </delete>
+
     <select id="selectOneByInfo" parameterType="com.admin.apartment.entity.UmsAdmin" resultType="com.admin.apartment.entity.UmsAdmin">
         select * from ums_admin
         <where>
@@ -19,10 +32,58 @@
         </where>
     </select>
 
+    <!--  模糊查询用户信息 -->
+    <select id="selectUmsAdminByLike" resultType="com.admin.apartment.model.UmsAdminResponse" parameterType="com.admin.apartment.model.UmsAdminParams">
+        select * from ums_admin
+        <where>
+            1=1
+            <if test="t.id != 0">
+                and id = #{id}
+            </if>
+            <if test="t.username != null">
+                and username like '%${t.username}%'
+            </if>
+            <if test="t.phone != null">
+                and phone like '%${t.phone}%'
+            </if>
+            <if test="t.userId != 0">
+                and userId = #{t.userId}
+            </if>
+            <if test="t.roleNoteSet != null">
+                and roleNote in
+                <foreach item="item" index="index" collection="t.roleNoteSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            and roleId > #{t.roleId}
+            order by createTime desc
+        </where>
+    </select>
+
     <!--  通过 Username 更改用户最近登录时间  -->
     <update id="updateByUsername" parameterType="java.lang.String">
-        update ums_admin set login_time = now()
+        update ums_admin set loginTime = now()
         where username=#{username}
+    </update>
+
+    <update id="changeUsername" parameterType="com.admin.apartment.model.UmsAdminParams">
+        update ums_admin set username=#{username}
+        where id=#{id}
+    </update>
+    <update id="changePassword" parameterType="com.admin.apartment.model.UmsAdminParams">
+        update ums_admin set password=#{password}
+        where id=#{id}
+    </update>
+    <update id="changePhone" parameterType="com.admin.apartment.model.UmsAdminParams">
+        update ums_admin set phone=#{phone}
+        where id=#{id}
+    </update>
+
+<!-- 对账户的启用和禁用进行切换-->
+    <update id="changeStatus" parameterType="com.admin.apartment.model.UmsAdminParams">
+        update ums_admin set status=#{status}
+        where id=#{id}
     </update>
 
 

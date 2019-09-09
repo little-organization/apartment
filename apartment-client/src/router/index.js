@@ -74,7 +74,7 @@ export const asyncRoutes = [
       path: 'doorlock',
       name: '门锁管理',
       component: () => import('@/views/doorlock/index'),
-      meta: { title: '门锁管理', icon: 'lock', roles: ['系统管理员'] }
+      meta: { title: '门锁管理', icon: 'lock', roles: ['超级管理员', '系统管理员'] }
     }]
   },
 
@@ -86,7 +86,7 @@ export const asyncRoutes = [
       path: 'apartment',
       name: '公寓管理',
       component: () => import('@/views/apartment/index'),
-      meta: { title: '公寓管理', icon: 'home', roles: ['系统管理员'] }
+      meta: { title: '公寓管理', icon: 'home', roles: ['超级管理员', '系统管理员'] }
     }]
   },
 
@@ -98,7 +98,19 @@ export const asyncRoutes = [
       path: 'leaseholder',
       name: '租户管理',
       component: () => import('@/views/leaseholder/index'),
-      meta: { title: '租户管理', icon: 'peoples', roles: ['系统管理员'] }
+      meta: { title: '租户管理', icon: 'peoples', roles: ['超级管理员', '系统管理员'] }
+    }]
+  },
+
+  {
+    path: '/aftersales',
+    component: Layout,
+    redirect: '/aftersales',
+    children: [{
+      path: 'aftersales',
+      name: '维修人员',
+      component: () => import('@/views/aftersales/index'),
+      meta: { title: '维修人员', icon: 'people', roles: ['超级管理员', '系统管理员'] }
     }]
   },
 
@@ -110,7 +122,7 @@ export const asyncRoutes = [
       path: 'check',
       name: '视频查看',
       component: () => import('@/views/components-demo/videoplayer'),
-      meta: { title: '视频查看', icon: 'form', roles: ['系统管理员'] }
+      meta: { title: '视频查看', icon: 'form', roles: ['超级管理员'] }
     }]
   },
 
@@ -123,13 +135,13 @@ export const asyncRoutes = [
       path: 'reportrepair',
       name: '报修管理',
       component: () => import('@/views/reportrepair/index'),
-      meta: { title: '报修信息', icon: 'education', roles: ['系统管理员'] }
+      meta: { title: '报修信息', icon: 'education', roles: ['超级管理员', '系统管理员', '售后人员'] }
     },
     {
       path: 'repair',
       name: '报修单',
       component: () => import('@/views/reportrepair/repair'),
-      meta: { title: '报修单', icon: 'form', roles: ['租户'] }
+      meta: { title: '报修单', icon: 'form', roles: ['超级管理员', '租户'] }
     }]
   },
 
@@ -141,7 +153,7 @@ export const asyncRoutes = [
       path: 'messageTemplate',
       name: '短信模板',
       component: () => import('@/views/message/index'),
-      meta: { title: '短信模板', icon: 'message', roles: ['系统管理员'] }
+      meta: { title: '短信模板', icon: 'message', roles: ['超级管理员'] }
     }]
   },
 

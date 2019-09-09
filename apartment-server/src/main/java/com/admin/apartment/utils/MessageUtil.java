@@ -19,7 +19,7 @@ public class MessageUtil {
     private String accessKeyId;
     @Value("${aliyun.accessSecret}")
     private String accessSecret;
-    @Value("${aliyun.RegionId}")
+    @Value("${aliyun.regionId}")
     private String RegionId;
 
     /**

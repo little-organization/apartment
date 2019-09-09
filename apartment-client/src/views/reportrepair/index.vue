@@ -95,7 +95,7 @@
     </el-dialog>
     <!-- 租户信息查看 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
-      <el-table v-if="userinfo!=null" :data="[userinfo]" border fit highlight-current-row style="width: 100%; margin-top:30px;">
+      <el-table v-if="userinfo!=null" v-loading="userLoading" :data="[userinfo]" border fit highlight-current-row>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -118,7 +118,7 @@
                 <span>{{ props.row.idNumber }}</span>
               </el-form-item>
               <el-form-item label="租住状态">
-                <span>{{ props.row.isLive===0?'未租住':'已租住' }}</span>
+                <span>{{ props.row.isLive===0?'未入住':'已入住' }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -135,7 +135,7 @@
     </el-dialog>
     <!-- 查看公寓信息 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogApartmentVisible">
-      <el-table v-if="apartmentinfo!=null" :data="[apartmentinfo]" border fit highlight-current-row style="width: 100%; margin-top:30px;">
+      <el-table v-if="apartmentinfo!=null" v-loading="apartmentLoading" :data="[apartmentinfo]" border fit highlight-current-row>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -266,9 +266,14 @@ export default {
         apartmentWatch: '查看公寓租户信息',
         fileWatch: '查看报修文件'
       },
+      // 查看租户
+      userLoading: false,
       dialogUserVisible: false,
+      // 查看公寓
+      apartmentLoading: false,
       dialogApartmentVisible: false,
       dialogStatusVisible: false,
+      // 查看文件
       dialogFileVisible: false,
       downloadLoading: false,
       pickerOptions: {
@@ -316,7 +321,7 @@ export default {
     inited(viewer) {
       this.$viewer = viewer
     },
-    // 获取分页公寓的数据
+    // 获取报修的数据
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
@@ -408,19 +413,21 @@ export default {
       this.confirmUpdate = false
     },
     watchUserData(row) {
+      this.userLoading = true
       this.dialogStatus = 'userWatch'
-      this.temp = Object.assign({}, row) // copy obj
       this.dialogUserVisible = true
-      userInfoById(this.temp.userid).then(response => {
+      userInfoById(row.userid).then(response => {
         this.userinfo = response.data
+        this.userLoading = false
       })
     },
     watchApartmentData(row) {
+      this.apartmentLoading = true
       this.dialogStatus = 'apartmentWatch'
-      this.temp = Object.assign({}, row) // copy obj
       this.dialogApartmentVisible = true
-      apartmentById(this.temp.apartmentid).then(response => {
+      apartmentById(row.apartmentid).then(response => {
         this.apartmentinfo = response.data
+        this.apartmentLoading = false
       })
     },
     watchFileData(row) {

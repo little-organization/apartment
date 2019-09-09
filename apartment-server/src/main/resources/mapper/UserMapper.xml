@@ -86,10 +86,21 @@
         update apartment_user set status = #{status}
         where id=#{id}
     </update>
-<!--获取全部的证件类型-->
+
+    <!--获取全部的证件类型-->
     <select id="selectIdTypeList" resultType="java.lang.String">
         select distinct idType from apartment_user
     </select>
 
+    <!--  新增一条数据返回 id  -->
+    <insert id="insertHolder" parameterType="com.admin.apartment.entity.User" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO `apartment_user` ( `name`, `sex`, `phone`, `idNumber`, `idType`, `isLive`, `createtime`)
+        VALUES ( #{name}, #{sex}, #{phone}, #{idNumber}, #{idType}, #{isLive}, now())
+    </insert>
+
+    <!--  更新租户的手机号码  -->
+    <update id="updateUserPhoneById" parameterType="com.admin.apartment.entity.User">
+        update apartment_user set phone=#{phone} where id=#{id}
+    </update>
 
 </mapper>

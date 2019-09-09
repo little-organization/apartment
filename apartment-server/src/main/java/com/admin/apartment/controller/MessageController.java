@@ -1,18 +1,17 @@
 package com.admin.apartment.controller;
 
 import com.admin.apartment.common.CommonResult;
-import com.admin.apartment.entity.Apartment;
-import com.admin.apartment.entity.MsgSign;
-import com.admin.apartment.entity.MsgTemplate;
-import com.admin.apartment.entity.UmsAdmin;
+import com.admin.apartment.entity.*;
 import com.admin.apartment.model.FiltersTag;
 import com.admin.apartment.model.message.*;
 import com.admin.apartment.service.*;
+import com.aliyuncs.CommonResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/apartment/message")
@@ -36,6 +35,9 @@ public class MessageController {
     @Autowired
     IMsgTemplateService iMsgTemplateService;
 
+    @Autowired
+    IPhoneVerifyService iPhoneVerifyService;
+
     /**
      * 发送短信
      * */
@@ -44,6 +46,27 @@ public class MessageController {
     CommonResult sendMsg(@RequestBody SendBatchSmsReqParams params){
         SendSmsResponse response = iSendMessageService.SendBatchSms(params);
         return CommonResult.success(response);
+    }
+
+    /**
+     * 发送验证码
+     * */
+    @RequestMapping(value = "/getCode",method = RequestMethod.POST)
+    public @ResponseBody
+    CommonResult getCode(@RequestBody PhoneVerify params){
+        String code = String.valueOf(new Random().nextInt(899999) + 100000);
+        params.setBarcode(code);
+        // 正式使用
+        // SendSmsResponse response = iSendMessageService.SendCode(params);
+        // 测试使用
+        SendSmsResponse response = new SendSmsResponse();
+        response.setCode("OK");
+
+        boolean result = false;
+        if ("OK".equals(response.getCode())) {
+         result = iPhoneVerifyService.insertNode(params);
+        }
+        return CommonResult.success(result);
     }
 
     /**
@@ -125,5 +148,9 @@ public class MessageController {
         MsgSign response = iMsgSignService.querySmsSignFromAli(signName);
         return CommonResult.success(response);
     }
+
+
+
+
 
 }

@@ -1,5 +1,6 @@
-package com.admin.apartment.entity;
+package com.admin.apartment.model;
 
+import com.admin.apartment.entity.UmsRole;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -31,8 +32,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@NoArgsConstructor
-public class UmsAdmin implements Serializable, UserDetails {
+public class UmsAdminResponse implements Serializable {
 
     private static final long serialVersionUID = 13456908192834L;
 
@@ -42,6 +42,11 @@ public class UmsAdmin implements Serializable, UserDetails {
     private String username;
 
     private String password;
+
+    /**
+     * 备注信息
+     */
+    private String roleNote;
 
     /**
      * 创建时间
@@ -78,56 +83,4 @@ public class UmsAdmin implements Serializable, UserDetails {
      */
     private long roleId;
 
-    /**
-     * 角色信息
-     */
-    private String roleNote;
-
-    /**
-     * 权限
-     */
-    @TableField(exist = false)
-    private List<UmsRole> umsRoles;
-
-    /**
-     * 权限
-     */
-    @TableField(exist = false)
-    private List<String> roles;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<String> strings = new ArrayList<>();
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (UmsRole role : umsRoles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-            strings.add(role.getName());
-        }
-        this.roles = strings;
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.status==1;
-    }
-
-    public UmsAdmin(String username) {
-        this.username = username;
-    }
 }

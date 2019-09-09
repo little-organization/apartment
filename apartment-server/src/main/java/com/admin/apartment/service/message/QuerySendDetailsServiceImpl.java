@@ -21,7 +21,7 @@ public class QuerySendDetailsServiceImpl implements IQuerySendDetailsService {
     @Autowired
     MessageUtil messageUtil;
 
-    @Value("${aliyun.RegionId}")
+    @Value("${aliyun.regionId}")
     private String RegionId;
 
     /**

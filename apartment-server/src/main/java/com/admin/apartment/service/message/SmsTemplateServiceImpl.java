@@ -17,7 +17,7 @@ public class SmsTemplateServiceImpl implements ISmsTemplateService {
     @Autowired
     MessageUtil messageUtil;
 
-    @Value("${aliyun.RegionId}")
+    @Value("${aliyun.regionId}")
     private String RegionId;
 
     /**

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '公寓管理系统',
+  title: '青沐公寓',
 
   /**
    * @type {boolean} true | false

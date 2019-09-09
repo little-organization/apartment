@@ -9,7 +9,8 @@ const state = {
   name: '',
   avatar: '',
   id: '',
-  roles: []
+  roles: [],
+  userInfo: null
 }
 
 const mutations = {
@@ -30,6 +31,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_USERINFO: (state, userInfo) => {
+    state.userInfo = userInfo
   }
 }
 
@@ -54,6 +58,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
+        commit('SET_USERINFO', data)
         const { roles, username, id } = data
         commit('SET_NAME', username)
         commit('SET_ID', id)
@@ -96,11 +101,6 @@ const actions = {
   // dynamically modify permissions
   changeRoles({ commit, dispatch }, role) {
     return new Promise(async resolve => {
-      const token = role + '-token'
-
-      commit('SET_TOKEN', token)
-      setToken(token)
-
       const { roles } = await dispatch('getInfo')
 
       resetRouter()

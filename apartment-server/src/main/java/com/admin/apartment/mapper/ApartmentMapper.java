@@ -22,12 +22,12 @@ import java.util.List;
 public interface ApartmentMapper extends BaseMapper<Apartment> {
 
     /**
-     * 查询文件信息
+     * 查询公寓信息
      * */
     Page<Apartment> selectApartmentByInfo(IPage<ApartmentParams> apartmentIPage);
 
     /**
-     * 模糊查询文件信息
+     * 模糊查询公寓信息
      * */
     Page<Apartment> selectApartmentByLike(IPage<ApartmentParams> apartmentIPage);
 

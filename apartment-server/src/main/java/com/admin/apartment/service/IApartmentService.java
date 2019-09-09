@@ -21,7 +21,7 @@ import java.util.Map;
 public interface IApartmentService extends IService<Apartment> {
 
     /**
-     * 模糊查询文件信息
+     * 模糊查询公寓信息
      * */
     Page<Apartment> selectApartmentByLike(ApartmentParams apartmentParams);
 

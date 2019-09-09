@@ -1,6 +1,7 @@
 package com.admin.apartment.mapper;
 
 import com.admin.apartment.entity.Apartment;
+import com.admin.apartment.entity.Repairs;
 import com.admin.apartment.entity.User;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.MyPage;
@@ -46,5 +47,15 @@ public interface UserMapper extends BaseMapper<User> {
      * 获取全部的证件类型
      * */
     List<String> selectIdTypeList();
+
+    /**
+     * 新增一条数据返回 id
+     * */
+    int insertHolder(User user);
+
+    /**
+     * 更新租户的手机号码
+     * */
+    int updateUserPhoneById(User user);
 
 }

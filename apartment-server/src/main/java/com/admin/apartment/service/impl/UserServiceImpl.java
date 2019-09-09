@@ -5,9 +5,11 @@ import cn.hutool.log.LogFactory;
 import cn.hutool.log.level.Level;
 import com.admin.apartment.entity.Apartment;
 import com.admin.apartment.entity.UmsAdmin;
+import com.admin.apartment.entity.UmsRole;
 import com.admin.apartment.entity.User;
 import com.admin.apartment.mapper.ApartmentMapper;
 import com.admin.apartment.mapper.UmsAdminMapper;
+import com.admin.apartment.mapper.UmsRoleMapper;
 import com.admin.apartment.mapper.UserMapper;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
@@ -52,10 +54,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     UmsAdminMapper umsAdminMapper;
 
     @Autowired
-    ISendMessageService iSendMessageService;
+    ApartmentMapper apartmentMapper;
 
     @Autowired
-    ApartmentMapper apartmentMapper;
+    UmsRoleMapper umsRoleMapper;
 
 
     @Override
@@ -77,16 +79,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(rollbackFor=Exception.class)
     public boolean insertUser(User user) {
         // 添加用户
-        boolean insert = userMapper.insert(user)>0;
+        boolean insert = userMapper.insertHolder(user)>0;
         // 租户添加成功后生成租户账号密码
         if(insert){
             UmsAdmin umsAdmin= new UmsAdmin();
             umsAdmin.setUsername(user.getName());
             umsAdmin.setPassword(user.getIdNumber().substring(user.getIdNumber().length()-6));
             // 添加后的租户直接启用账户
-            umsAdmin.setStatus(1);
+            UmsRole umsRole = umsRoleMapper.selectListByRoleName("租户");
+            umsAdmin.setRoleId(umsRole.getId());
+            umsAdmin.setRoleNote(umsRole.getName());
             umsAdmin.setPhone(user.getPhone());
-            umsAdmin.setRoleNote("租户");
+            umsAdmin.setUserId(user.getId());
             insert = umsAdminMapper.insert(umsAdmin)>0;
         }
         return insert;
@@ -102,6 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean deleteUserById(User user) {
         boolean result = userMapper.deleteById(user.getId())>0;
         if(result){
+            // 修改与租户绑定的公寓信息
             List<Apartment> list = apartmentMapper.getApartmentListByUserid(user.getId());
             if(list.size()>=1){
                 for (int i = 0; i <list.size() ; i++) {
@@ -109,6 +114,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                     apartmentMapper.updateById(list.get(i));
                 }
             }
+            // 删除租户的账号
+            result = umsAdminMapper.deleteByUserId(user.getId())>0;
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.admin.apartment.service.message;
 
+import com.admin.apartment.entity.PhoneVerify;
 import com.admin.apartment.model.message.SendBatchSmsReqParams;
 import com.admin.apartment.model.message.SendSmsReqParams;
 import com.admin.apartment.model.message.SendSmsResponse;
@@ -10,7 +11,10 @@ import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 @Service
 public class SendMessageServiceImpl implements ISendMessageService {
@@ -18,8 +22,33 @@ public class SendMessageServiceImpl implements ISendMessageService {
     @Autowired
     MessageUtil messageUtil;
 
-    @Value("${aliyun.RegionId}")
+    @Value("${aliyun.regionId}")
     private String RegionId;
+
+    @Value("${aliyun.templateCode}")
+    private String sendCodeTemplateCode;
+
+    private final static String sendCodeSignName = "青沐公寓";
+
+    /**
+     * 发送验证码
+     * */
+    @Override
+    public SendSmsResponse SendCode(PhoneVerify params) {
+        CommonRequest request = messageUtil.commonRequest();
+        request.setAction("SendSms");
+        request.putQueryParameter("RegionId", RegionId);
+        // 短信号码
+        request.putQueryParameter("PhoneNumbers", params.getPhone());
+        // 签名
+        request.putQueryParameter("SignName", sendCodeSignName);
+        // 模板 ID
+        request.putQueryParameter("TemplateCode", sendCodeTemplateCode);
+        // 模板参数
+        request.putQueryParameter("TemplateParam", "{\"code\":"+params.getBarcode()+"}");
+        CommonResponse response =  messageUtil.commonResponse(request);
+        return JSONObject.parseObject(response.getData(), SendSmsResponse.class);
+    }
 
     /**
      * 单个短信发送

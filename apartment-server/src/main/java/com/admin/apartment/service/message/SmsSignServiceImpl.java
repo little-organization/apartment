@@ -19,7 +19,7 @@ public class SmsSignServiceImpl implements ISmsSignService {
     @Autowired
     MessageUtil messageUtil;
 
-    @Value("${aliyun.RegionId}")
+    @Value("${aliyun.regionId}")
     private String RegionId;
 
     @Override

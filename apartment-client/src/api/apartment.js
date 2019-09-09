@@ -66,7 +66,6 @@ export function deleteApartment(params) {
 }
 
 export function apartmentListByUserid(id) {
-  console.log(id)
   return request({
     url: '/apartment/getApartmentListByUserid/' + id,
     method: 'get'

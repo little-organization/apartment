@@ -94,7 +94,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
     debugger
     console.log(error)
     Message({

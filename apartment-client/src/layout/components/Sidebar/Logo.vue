@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      title: '公寓管理系统',
+      title: '青沐公寓',
       logo: headerPNG
     }
   }

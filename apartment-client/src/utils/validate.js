@@ -22,6 +22,15 @@ export function validUsername(str) {
   }
 }
 
+/* 是否为空*/
+export function validateValueIsEmity(rule, value, callback) {
+  if (value === '' || value === undefined || value === null || value.trim().length === 0) {
+    callback(new Error('此参数不能为空'))
+  } else {
+    callback()
+  }
+}
+
 /* 是否合法IP地址*/
 export function validateIP(rule, value, callback) {
   if (value === '' || value === undefined || value === null) {
@@ -43,7 +52,7 @@ export function validatePhoneTwo(rule, value, callback) {
     callback()
   } else {
     if ((!reg.test(value)) && value !== '') {
-      callback(new Error('请输入正确的电话号码或者固话号码'))
+      callback(new Error('请输入正确的电话号码'))
     } else {
       callback()
     }
@@ -66,7 +75,7 @@ export function validateTelphone(rule, value, callback) {
 export function validatePhone(rule, value, callback) {
   const reg = /^[1][3,4,5,7,8][0-9]{9}$/
   if (value === '' || value === undefined || value === null) {
-    callback()
+    callback(new Error('请输入正确的电话号码'))
   } else {
     if ((!reg.test(value)) && value !== '') {
       callback(new Error('请输入正确的电话号码'))
@@ -124,10 +133,12 @@ export function validateURL(textval) {
 export function isPassword(rule, value, callback) {
   const reg = /^[_a-zA-Z0-9]+$/
   if (value === '' || value === undefined || value === null) {
-    callback()
+    callback(new Error('请输入密码'))
   } else {
     if (!reg.test(value)) {
       callback(new Error('密码仅由英文字母，数字以及下划线组成'))
+    } else if (!(value.length >= 6)) {
+      callback(new Error('密码长度必须大于等于 6'))
     } else {
       callback()
     }

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableScheduling
-@EnableCaching
 public class ApartmentServerApplication {
 
     public static void main(String[] args) {

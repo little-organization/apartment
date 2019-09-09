@@ -4,7 +4,7 @@
       <el-input v-model.trim="listQuery.name" type="text" :min="1" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter">
         <template slot="prepend">姓名</template>
       </el-input>
-      <el-input v-model.number="listQuery.phone" type="number" :min="1" placeholder="手机号" style="width: 250px;" class="filter-item" @keyup.enter.native="handleFilter">
+      <el-input v-model.number="listQuery.phone" :min="1" placeholder="手机号" style="width: 250px;" class="filter-item" @keyup.enter.native="handleFilter">
         <template slot="prepend">电话号码</template>
       </el-input>
       <el-input v-model.trim="listQuery.idNumber" :min="1" placeholder="证件号码" style="width: 300px;" class="filter-item" @keyup.enter.native="handleFilter">
@@ -65,7 +65,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding">
+      <el-table-column label="操作" align="center" width="147px" class-name="small-padding">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -86,12 +86,12 @@
           <el-input v-model.trim="temp.name" placeholder="请输入租户姓名" />
         </el-form-item>
         <el-form-item label="租户性别" prop="sex">
-          <el-select v-model="temp.sex" placeholder="请选择" filterable default-first-option clearable>
+          <el-select v-model="temp.sex" placeholder="请选择" default-first-option>
             <el-option v-for="item in sexList" :key="item.text" :label="item.text" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="租户电话" prop="phone">
-          <el-input v-model="temp.phone" :minlength="8" :maxlength="11" placeholder="请输入电话号码" />
+        <el-form-item label="租户手机号码" prop="phone">
+          <el-input v-model="temp.phone" placeholder="请输入手机号码" />
         </el-form-item>
         <el-form-item label="租户证件类型" prop="idType">
           <el-select v-model="temp.idType" placeholder="请选择或输入" filterable allow-create default-first-option clearable>
@@ -113,7 +113,7 @@
     </el-dialog>
     <!-- 查看公寓信息 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogApartmentVisible">
-      <el-table v-if="apartmentList!=null" :data="apartmentList" border fit highlight-current-row style="width: 100%; margin-top:30px;">
+      <el-table v-if="apartmentList!=null" :data="apartmentList" border fit highlight-current-row>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -157,7 +157,7 @@ import { getUserList, idTypeList, deleteUserById, updateUserById, createUser } f
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { validatePhoneTwo } from '@/utils/validate'
+import { validatePhoneTwo, validateValueIsEmity } from '@/utils/validate'
 
 export default {
   name: 'ComplexTable',
@@ -210,7 +210,10 @@ export default {
       rules: {
         name: [{ required: true, message: '租户姓名必填', trigger: 'blur' }],
         sex: [{ required: true, message: '租户性别必填', trigger: 'change' }],
-        phone: [{ required: true, message: '请输入正确的电话号码', trigger: 'blur', validator: validatePhoneTwo }],
+        phone: [
+          { required: true, trigger: 'blur', validator: validateValueIsEmity },
+          { trigger: 'blur', validator: validatePhoneTwo }
+        ],
         idType: [{ required: true, message: '租户证件必填', trigger: 'change' }],
         idNumber: [{ required: true, message: '租户证件必填', trigger: 'blur' }]
       },

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.admin.apartment.mapper.RepairMapper">
+
+    <!--  查询售后人员信息  -->
+    <select id="selectRepairByInfo" parameterType="com.admin.apartment.entity.Repair" resultType="com.admin.apartment.entity.Repair">
+        select * from apartment_repair
+        <where>
+            1=1
+            <if test="t.id != 0">
+                and id=#{t.id}
+            </if>
+            <if test="t.name != null">
+                and name=#{t.name}
+            </if>
+            <if test="t.sex != null">
+                and sex=#{t.sex}
+            </if>
+            <if test="t.phone != null">
+                and phone=#{t.phone}
+            </if>
+            <if test="t.idNumber != null">
+                and idNumber=#{t.idNumber}
+            </if>
+            <if test="t.idType != null">
+                and idType=#{t.idType}
+            </if>
+            <if test="t.isLive != null">
+                and isLive=#{t.isLive}
+            </if>
+            order by createtime desc
+        </where>
+    </select>
+
+    <!--  模糊查询售后人员信息通过姓名  -->
+    <select id="selectRepairByName" parameterType="java.lang.String" resultType="com.admin.apartment.entity.Repair">
+        select * from apartment_repair
+        <where>
+            1=1
+            <if test="name != null">
+                and name like '%${name}%'
+            </if>
+        </where>
+    </select>
+
+    <!--  模糊查询售后人员信息  -->
+    <select id="selectRepairByLike" parameterType="com.admin.apartment.entity.Repair" resultType="com.admin.apartment.entity.Repair">
+        select * from apartment_repair
+        <where>
+            1=1
+            <if test="t.name != null">
+                and name like '%${t.name}%'
+            </if>
+            <if test="t.sexSet != null">
+                and sex in
+                <foreach item="item" index="index" collection="t.sexSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.phone != null">
+                and phone like '%${t.phone}%'
+            </if>
+            <if test="t.idNumber != null">
+                and idNumber like '%${t.idNumber}%'
+            </if>
+            <if test="t.idTypeSet != null">
+                and idType in
+                <foreach item="item" index="index" collection="t.idTypeSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="t.isLiveSet != null">
+                and isLive in
+                <foreach item="item" index="index" collection="t.isLiveSet"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            order by createtime desc
+        </where>
+    </select>
+    <!--更新售后人员的状态为已入住或未入住-->
+    <update id="updateRepairStatusById">
+        update apartment_repair set status = #{status}
+        where id=#{id}
+    </update>
+
+    <!--获取全部的证件类型-->
+    <select id="selectIdTypeList" resultType="java.lang.String">
+        select distinct idType from apartment_repair
+    </select>
+
+    <!--  新增一条数据返回 id  -->
+    <insert id="insertRepair" parameterType="com.admin.apartment.entity.Repair" useGeneratedKeys="true" keyProperty="id">
+       INSERT INTO `apartment_repair` ( `name`, `sex`, `phone`, `idNumber`, `idType`, `isLive`, `createtime`)
+        VALUES ( #{name}, #{sex}, #{phone}, #{idNumber}, #{idType}, #{isLive}, now())
+    </insert>
+
+    <!--  更新售后人员的手机号码  -->
+    <update id="updateRepairPhoneById" parameterType="com.admin.apartment.entity.Repair">
+        update apartment_repair set phone=#{phone} where id=#{id}
+    </update>
+
+</mapper>

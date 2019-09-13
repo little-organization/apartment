@@ -87,6 +87,11 @@ public class MsgSignServiceImpl extends ServiceImpl<MsgSignMapper, MsgSign> impl
         return flag;
     }
 
+    @Override
+    public List<MsgSign> selectAllSuccessSign() {
+        return msgSignMapper.selectAllSuccessSign();
+    }
+
     /**
      * 定时获取审核没通过签名信息
      * */

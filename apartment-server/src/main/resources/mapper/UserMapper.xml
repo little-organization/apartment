@@ -82,8 +82,8 @@
         </where>
     </select>
     <!--更新租户的状态为已入住或未入住-->
-    <update id="updateUserStatusById">
-        update apartment_user set status = #{status}
+    <update id="updateUserIsLiveById">
+        update apartment_user set isLive = #{isLive}
         where id=#{id}
     </update>
 

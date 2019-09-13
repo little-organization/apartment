@@ -94,4 +94,10 @@ public class RepairsParams {
      */
     private Integer limit;
 
+    /**
+     * 售后人员表 id
+     */
+    private long repairId;
+
+
 }

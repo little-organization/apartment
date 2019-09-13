@@ -66,12 +66,16 @@ public class RepairsServiceImpl extends ServiceImpl<RepairsMapper, Repairs> impl
     @Transactional(rollbackFor=Exception.class)
     public boolean  updateRepair(Repairs repairs) {
         repairs.setConductTime(LocalDateTime.now());
-        boolean result = repairsMapper.updateById(repairs)>0;
-        // 记录维修日志
-        if (result){
-            repairsLogMapper.insertLog(repairs);
+        Repairs repairs1 = repairsMapper.selectById(repairs.getId());
+        if(repairs1.getRepairId()==repairs.getRepairId() || repairs1.getRepairId() == 0){
+            boolean result = repairsMapper.updateById(repairs)>0;
+            // 记录维修日志
+            if (result){
+                repairsLogMapper.insertLog(repairs);
+            }
+            return result;
         }
-        return result;
+        return false;
     }
 
     @Override

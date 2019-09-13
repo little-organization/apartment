@@ -51,6 +51,15 @@
             <if test="t.conductTimeAfter != null">
                 <![CDATA[and conductTime <= date_format(#{t.conductTimeAfter},'%Y-%m-%d %H:%i:%s') ]]>
             </if>
+            <if test="t.repairId > 0">
+                and repairId != 0
+            </if>
+            <if test="t.repairId == 0">
+                and repairId = #{t.repairId}
+            </if>
+            <if test="t.userid != 0">
+                and userid = #{t.userid}
+            </if>
             order by createtime desc
         </where>
     </select>

@@ -97,6 +97,11 @@ public class MsgTemplateServiceImpl extends ServiceImpl<MsgTemplateMapper, MsgTe
         return msgTemplate;
     }
 
+    @Override
+    public List<MsgTemplate> selectAllSuccessTemplate() {
+        return msgTemplateMapper.selectAllSuccessTemplate();
+    }
+
     /**
      * 定时获取审核没通过模板信息
      * */

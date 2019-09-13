@@ -21,4 +21,9 @@
     <select id="selectTemplateCodeAndNameList" resultType="com.admin.apartment.entity.MsgTemplate">
         select * from msg_template
     </select>
+
+    <select id="selectAllSuccessTemplate" resultType="com.admin.apartment.entity.MsgTemplate">
+        select * from msg_template where TemplateStatus = 1 and TemplateType !=0
+    </select>
+
 </mapper>

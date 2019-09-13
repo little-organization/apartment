@@ -16,6 +16,7 @@ public class SendBatchSmsReqParams {
      *
      * 国内短信：11位手机号码，例如15900000000。
      * 国际/港澳台消息：国际区号+号码，例如85200000000。
+     * ["15900000000","13500000000"]
      * */
     private String PhoneNumberJson;
 
@@ -23,6 +24,7 @@ public class SendBatchSmsReqParams {
      * 短信签名名称，JSON数组格式。
      *
      * 请在控制台签名管理页面签名名称一列查看。
+     * ["阿里云","阿里巴巴"]
      * */
     private String SignNameJson;
 

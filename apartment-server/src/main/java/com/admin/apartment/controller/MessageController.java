@@ -45,7 +45,11 @@ public class MessageController {
     public @ResponseBody
     CommonResult sendMsg(@RequestBody SendBatchSmsReqParams params){
         SendSmsResponse response = iSendMessageService.SendBatchSms(params);
-        return CommonResult.success(response);
+        String result = "false";
+        if ("OK".equals(response.getCode())) {
+            result = "true";
+        }
+        return CommonResult.success(response,result);
     }
 
     /**
@@ -86,6 +90,16 @@ public class MessageController {
     public @ResponseBody
     CommonResult selectTemplateCodeAndNameList(){
         List<FiltersTag> response = iMsgTemplateService.selectTemplateCodeAndNameList();
+        return CommonResult.success(response);
+    }
+
+    /**
+     * 查询模板所有可用类型
+     * */
+    @RequestMapping(value = "/selectAllSuccessTemplate",method = RequestMethod.GET)
+    public @ResponseBody
+    CommonResult selectAllSuccessTemplate(){
+        List<MsgTemplate> response = iMsgTemplateService.selectAllSuccessTemplate();
         return CommonResult.success(response);
     }
 
@@ -136,6 +150,16 @@ public class MessageController {
     public @ResponseBody
     CommonResult querySmsSign(@RequestBody(required = false) QuerySmsSignParams params){
         Page<MsgSign> response = iMsgSignService.querySmsSignList(params);
+        return CommonResult.success(response);
+    }
+
+    /**
+     * 查询所有可用签名
+     * */
+    @RequestMapping(value = "/selectAllSuccessSign",method = RequestMethod.GET)
+    public @ResponseBody
+    CommonResult selectAllSuccessSign(){
+        List<MsgSign> response = iMsgSignService.selectAllSuccessSign();
         return CommonResult.success(response);
     }
 

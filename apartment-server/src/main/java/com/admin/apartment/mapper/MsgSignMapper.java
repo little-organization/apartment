@@ -25,4 +25,6 @@ public interface MsgSignMapper extends BaseMapper<MsgSign> {
 
     List<MsgSign> selectSignBySignStatus();
 
+    List<MsgSign> selectAllSuccessSign();
+
 }

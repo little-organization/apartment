@@ -61,6 +61,11 @@ public class Repairs implements Serializable {
     private String content;
 
     /**
+     * 售后人员表 id
+     */
+    private long repairId;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createtime;

@@ -40,4 +40,9 @@ public interface IMsgTemplateService extends IService<MsgTemplate> {
      * 查询模板所有类型
      * */
     List<FiltersTag> selectTemplateCodeAndNameList();
+
+    /**
+     * 查询模板所有可用类型
+     * */
+    List<MsgTemplate> selectAllSuccessTemplate();
 }

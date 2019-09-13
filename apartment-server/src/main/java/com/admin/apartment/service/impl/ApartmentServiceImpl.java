@@ -91,10 +91,13 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
         Apartment apartment1 = apartmentMapper.selectById(apartment.getId());
         if(apartment1.getUserid()!=apartment.getUserid()){
             if(apartment1.getUserid()!=0){
-                userMapper.updateUserStatusById(apartment1.getUserid(),0);
+                List<Apartment> list = apartmentMapper.getApartmentListByUserid(apartment1.getUserid());
+                if (list.size()==1) {
+                    userMapper.updateUserIsLiveById(apartment1.getUserid(),0);
+                }
             }
             if(apartment.getUserid()!=0){
-                userMapper.updateUserStatusById(apartment.getUserid(),1);
+                userMapper.updateUserIsLiveById(apartment.getUserid(),1);
             }
         }
         boolean result = apartmentMapper.updateById(apartment)>0;
@@ -109,7 +112,7 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
         if (result && apartment.getUserid()!=0) {
             List<Apartment> apartment1 = apartmentMapper.getApartmentListByUserid(apartment.getUserid());
             if (apartment1.size()==1 ){
-                userMapper.updateUserStatusById(apartment.getUserid(),0);
+                userMapper.updateUserIsLiveById(apartment.getUserid(),0);
             }
         }
         return result;

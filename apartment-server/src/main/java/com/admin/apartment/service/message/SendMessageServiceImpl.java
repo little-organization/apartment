@@ -65,7 +65,7 @@ public class SendMessageServiceImpl implements ISendMessageService {
         // 模板 ID
         request.putQueryParameter("TemplateCode", params.getTemplateCode());
         // 模板参数
-        request.putQueryParameter("TemplateParam", params.getTemplateParam());
+        request.putQueryParameter("TemplateParam", params.getTemplateParam()==null?"\"\"":params.getTemplateParam());
         return messageUtil.commonResponse(request);
     }
 

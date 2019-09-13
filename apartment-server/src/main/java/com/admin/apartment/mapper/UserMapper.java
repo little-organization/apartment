@@ -41,7 +41,7 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 通过 ID 更改租户的状态
      * */
-    int updateUserStatusById(@Param("id") long id,@Param("status") int status);
+    int updateUserIsLiveById(@Param("id") long id,@Param("isLive") int isLive);
 
     /**
      * 获取全部的证件类型

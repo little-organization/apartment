@@ -145,7 +145,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
                         user.setPhone(params.getPhone());
                         userMapper.updateUserPhoneById(user);
                     }
-                    // 修改当前租户的手机
+                    // 修改当前售后人员的手机
                     else if(params.getRepairId()!=0){
                         Repair repair = new Repair();
                         repair.setId(params.getRepairId());

@@ -26,4 +26,6 @@ public interface MsgTemplateMapper extends BaseMapper<MsgTemplate> {
 
     List<MsgTemplate> selectTemplateCodeAndNameList();
 
+    List<MsgTemplate> selectAllSuccessTemplate();
+
 }

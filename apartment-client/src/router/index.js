@@ -135,13 +135,19 @@ export const asyncRoutes = [
       path: 'reportrepair',
       name: '报修管理',
       component: () => import('@/views/reportrepair/index'),
-      meta: { title: '报修信息', icon: 'education', roles: ['超级管理员', '系统管理员', '售后人员'] }
+      meta: { title: '报修管理', icon: 'education', roles: ['超级管理员', '系统管理员', '售后人员'] }
     },
     {
       path: 'repair',
       name: '报修单',
       component: () => import('@/views/reportrepair/repair'),
       meta: { title: '报修单', icon: 'form', roles: ['超级管理员', '租户'] }
+    },
+    {
+      path: 'myrepair',
+      name: '我的报修',
+      component: () => import('@/views/aftersales/myrepair'),
+      meta: { title: '我的报修', icon: 'icon', roles: ['售后人员', '租户'] }
     }]
   },
 

@@ -246,7 +246,7 @@
               <el-button type="success" size="mini" @click="CheckMsgReasion(row)">
                 查看原因
               </el-button>
-              <el-button :disabled="row.sendStatus !== 3" type="danger" size="mini" @click="henderSendMsgAgain(row)">
+              <el-button :disabled="row.sendStatus !== '2'" type="danger" size="mini" @click="henderSendMsgAgain(row)">
                 重新发送
               </el-button>
             </template>
@@ -539,8 +539,9 @@ export default {
         return false
       }
       querySmsSendMsgDetail(this.listMsgQuery).then(response => {
-        const { code, totalCount, smsSendDetailDTOs } = response.data
+        const { code, message, totalCount, smsSendDetailDTOs } = response.data
         this.code = code
+        this.messageInfo = message
         this.totaMsg = totalCount
         this.listDetail = smsSendDetailDTOs.smsSendDetailDTO
         this.detailListLoading = false
@@ -792,7 +793,7 @@ export default {
     },
     // 查看短信发送失败原因
     CheckMsgReasion(row) {
-      this.$alert('<div>请求状态码：<strong>' + this.code + '</strong><button class=\"el-button el-button--primary el-button--mini\" style=\"margin-left: 15px;\"><a href=\"https://help.aliyun.com/document_detail/101346.html\" target=\"_blank\">(错误码详见错误码列表)</a></button></div><div style=\"margin-top: 10px;\">运营商短信状态码：<strong>' + row.errCode + '</strong><button class=\"el-button el-button--primary el-button--mini\" style=\"margin-left: 5px;\"><a href=\"https://help.aliyun.com/document_detail/101347.html\" target=\"_blank\">(错误码详见错误码列表)</a></button></div>', '发送失败原因', {
+      this.$alert('<div>请求状态码：<strong>' + this.code + ':' + this.messageInfo + '</strong><button class=\"el-button el-button--primary el-button--mini\" style=\"margin-left: 15px;\"><a href=\"https://help.aliyun.com/document_detail/101346.html\" target=\"_blank\">(错误码详见错误码列表)</a></button></div><div style=\"margin-top: 10px;\">运营商短信状态码：<strong>' + row.errCode + '</strong><button class=\"el-button el-button--primary el-button--mini\" style=\"margin-left: 5px;\"><a href=\"https://help.aliyun.com/document_detail/101347.html\" target=\"_blank\">(错误码详见错误码列表)</a></button></div>', '发送失败原因', {
         dangerouslyUseHTMLString: true
       })
     },

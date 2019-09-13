@@ -24,10 +24,10 @@
       @filter-change="filterHanderChange"
     >
       <el-table-column label="ID" type="index" align="center" width="60" />
-      <el-table-column label="报修人" prop="username" width="110px" align="center">
+      <el-table-column label="报修人" prop="username" align="center">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" content="点击查看租户信息" placement="top">
-            <el-button type="text" size="mini" close-transition @click="watchUserData(scope.row)">{{ scope.row.username }}</el-button>
+            <el-button type="text" size="mini" close-transition @click="watchUserData(scope.row, 1)">{{ scope.row.username }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -43,19 +43,22 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="报修文件" prop="hasFile" column-key="hasFile" width="110px" align="center" :filter-multiple="false" :filter-method="filterHasFile" :filters="hasFileList" filter-placement="bottom-end">
+      <el-table-column label="报修文件" prop="hasFile" column-key="hasFile" align="center" :filter-multiple="false" :filter-method="filterHasFile" :filters="hasFileList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.hasfile === 0 ? '' : '点击查看报修文件' " placement="top">
-            <el-button :disabled="scope.row.hasfile !== 1" :type="scope.row.hasfile === 0 ? 'info' : 'success'" size="mini" close-transition @click="watchFileData(scope.row)">{{ scope.row.hasfile===1 ? '有文件' : '无文件' }}</el-button>
+            <el-button :disabled="scope.row.hasfile !== 1" :type="scope.row.hasfile === 0 ? 'info' : 'primary'" size="mini" close-transition @click="watchFileData(scope.row)">{{ scope.row.hasfile===1 ? '有文件' : '无文件' }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="维修状态" prop="status" column-key="status" width="110px" align="center" :filter-method="filterStatus" :filters="statusList" filter-placement="bottom-end">
+      <el-table-column label="维修状态" prop="status" column-key="status" align="center" :filter-method="filterStatus" :filters="statusList" filter-placement="bottom-end">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="light" content="点击更改修理状态" placement="top">
-            <el-button type="success" size="mini" close-transition @click.native="changeRepairStatus(scope.row)">
-              <span>{{ scope.row.status }}</span>
-            </el-button>
+          <el-tag>{{ scope.row.status }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="领取任务" prop="repairId" column-key="repairId" align="center" :filter-multiple="false" :filter-method="filterRepairId" :filters="repairIdList" filter-placement="bottom-end">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="light" :content="scope.row.repairId === 0 ? '点击领取任务(仅售后人员)' : '任务已领取,点击查看售后人员信息' " placement="top">
+            <el-button :type="scope.row.repairId === 0 ? 'info' : 'success'" size="mini" @click="scope.row.repairId === 0 ? changeRepairIdInRepairs(scope.row) : watchUserData(scope.row, 2)">{{ scope.row.repairId === 0 ? '未领取' : '已领取' }}</el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -73,26 +76,6 @@
 
     <!-- 分页插件 -->
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <!-- 修改报修状态 -->
-    <el-dialog title="更改维修状态" :visible.sync="dialogStatusVisible">
-      <el-form ref="userForm" :model="temp" label-position="center" label-width="37%" style="width: 100%;">
-        <el-form-item label="请选择或输入状态:" prop="status">
-          <el-select v-model="temp.status" placeholder="请选择或输入状态" allow-create filterable>
-            <el-option v-for="item in statusList" :key="item.text" :label="item.value" :value="item.value">
-              <span style="float: left">{{ item.value }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogStatusVisible = false">
-          取消
-        </el-button>
-        <el-button :disabled="confirmUpdate" type="primary" @click="updateRepairStatusData()">
-          确认修改
-        </el-button>
-      </div>
-    </el-dialog>
     <!-- 租户信息查看 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
       <el-table v-if="userinfo!=null" v-loading="userLoading" :data="[userinfo]" border fit highlight-current-row>
@@ -188,19 +171,27 @@
 import { fetchList, statusList, updateRepair, getImages, image } from '@/api/repairs'
 import { apartmentById } from '@/api/apartment'
 import { userInfoById } from '@/api/apartmentuser'
+import { repairInfoById } from '@/api/apartmentrepair'
 import waves from '@/directive/waves' // waves directive
+import { mapGetters } from 'vuex'
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import permission from '@/directive/permission/index.js' // 权限判断指令
+import checkPermission from '@/utils/permission' // 权限判断函数
 
 export default {
   name: 'ComplexTable',
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       hasFileList: [
         { text: '有文件', value: 1 },
         { text: '无文件', value: 0 }
+      ],
+      repairIdList: [
+        { text: '已领取', value: 1 },
+        { text: '未领取', value: 0 }
       ],
       statusList: [
         { text: '未修理', value: '未修理' },
@@ -245,7 +236,8 @@ export default {
         conductTimeBefore: null,
         conductTimeAfter: null,
         hasFileSet: null,
-        statusSet: null
+        statusSet: null,
+        repairId: -1
       },
       temp: {
         id: null,
@@ -257,12 +249,13 @@ export default {
         content: '',
         createtime: '',
         conductTime: '',
-        hasFile: null
+        hasFile: null,
+        repairId: null
       },
-      dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
         userWatch: '查看租户信息',
+        aftersaleWatch: '查看售后人员信息',
         apartmentWatch: '查看公寓租户信息',
         fileWatch: '查看报修文件'
       },
@@ -313,11 +306,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ])
+  },
   created() {
     this.getList()
     this.getStatusList()
   },
   methods: {
+    // 权限验证函数
+    checkPermission,
+    // 文件查看器
     inited(viewer) {
       this.$viewer = viewer
     },
@@ -375,14 +376,31 @@ export default {
         this.listQuery.conductTimeAfter = parseTime(this.updatetimeLimit[1])
       }
     },
-    // 修改维修状态的先决判断
-    changeRepairStatus(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.dialogStatusVisible = true
-    },
-    // 执行更改维修状态方法
-    updateRepairStatusData() {
+    // 售后人员领取任务
+    changeRepairIdInRepairs(row) {
+      if (row.repairId !== 0) {
+        this.$notify({
+          title: '失败',
+          message: '此任务已被领取，无法重复领取',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      } else if (!this.checkPermission(['售后人员'])) {
+        this.$notify({
+          title: '失败',
+          message: '此任务仅可被售后人员领取',
+          type: 'error',
+          duration: 2000
+        })
+        return
+      }
+      if (this.confirmUpdate) {
+        return
+      }
       this.confirmUpdate = true
+      this.temp = Object.assign({}, row) // copy obj
+      this.temp.repairId = this.userInfo.repairId
       updateRepair(this.temp).then((response) => {
         const result = response.data
         if (result) {
@@ -397,14 +415,14 @@ export default {
           this.dialogStatusVisible = false
           this.$notify({
             title: '成功',
-            message: '更新成功',
+            message: '领取任务成功',
             type: 'success',
             duration: 2000
           })
         } else {
           this.$notify({
             title: '失败',
-            message: '更新失败',
+            message: '领取任务失败，此任务或已被领取',
             type: 'error',
             duration: 2000
           })
@@ -412,14 +430,32 @@ export default {
       })
       this.confirmUpdate = false
     },
-    watchUserData(row) {
-      this.userLoading = true
-      this.dialogStatus = 'userWatch'
-      this.dialogUserVisible = true
-      userInfoById(row.userid).then(response => {
-        this.userinfo = response.data
-        this.userLoading = false
-      })
+    watchUserData(row, type) {
+      console.log(type === 2 && this.checkPermission(['系统管理员', '超级管理员']))
+      if (type === 2 && this.checkPermission(['系统管理员', '超级管理员'])) {
+        this.userLoading = true
+        this.dialogStatus = 'userWatch'
+        this.dialogUserVisible = true
+        repairInfoById(row.repairId).then(response => {
+          this.userinfo = response.data
+          this.userLoading = false
+        })
+      } else if (type === 1) {
+        this.userLoading = true
+        this.dialogStatus = 'aftersaleWatch'
+        this.dialogUserVisible = true
+        userInfoById(row.userid).then(response => {
+          this.userinfo = response.data
+          this.userLoading = false
+        })
+      } else {
+        this.$notify({
+          title: '提示',
+          message: '此功能不允许您访问',
+          type: 'info',
+          duration: 2000
+        })
+      }
     },
     watchApartmentData(row) {
       this.apartmentLoading = true
@@ -483,6 +519,14 @@ export default {
     filterStatus(value, row) {
       return row.status === value
     },
+    // 任务领取状态过滤
+    filterRepairId(value, row) {
+      if (value === 0) {
+        return row.repairId === value
+      } else {
+        return row.repairId !== 0
+      }
+    },
     // 过滤条件改变时触发
     filterHanderChange(filters) {
       if (filters.hasFile !== undefined) {
@@ -503,7 +547,14 @@ export default {
         } else {
           this.listQuery.statusSet = null
         }
+      } else if (filters.repairId !== undefined) {
+        if (filters.repairId.length >= 1) {
+          this.listQuery.repairId = filters.repairId[0]
+        } else {
+          this.listQuery.repairId = -1
+        }
       }
+      console.log(this.listQuery.repairId)
       this.getList()
     }
   }

@@ -118,3 +118,17 @@ export function getCode(params) {
   })
 }
 
+export function selectAllSuccessSign() {
+  return request({
+    url: '/message/selectAllSuccessSign',
+    method: 'get'
+  })
+}
+
+export function selectAllSuccessTemplate() {
+  return request({
+    url: '/message/selectAllSuccessTemplate',
+    method: 'get'
+  })
+}
+

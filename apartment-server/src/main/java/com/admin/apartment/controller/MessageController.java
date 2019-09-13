@@ -61,10 +61,10 @@ public class MessageController {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);
         params.setBarcode(code);
         // 正式使用
-        // SendSmsResponse response = iSendMessageService.SendCode(params);
+         SendSmsResponse response = iSendMessageService.SendCode(params);
         // 测试使用
-        SendSmsResponse response = new SendSmsResponse();
-        response.setCode("OK");
+//        SendSmsResponse response = new SendSmsResponse();
+//        response.setCode("OK");
 
         boolean result = false;
         if ("OK".equals(response.getCode())) {

@@ -14,11 +14,11 @@ create table apartment
 )
   comment '公寓信息' charset = utf8;
 
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '复式', 34, '朝西北', 2300, '押一付四', '深证市友和道通集团', 0, '2019-08-21 16:25:12');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (4, '复式', 34, '朝西北', 2300, '押一付四', '深证市友和道通集团', 1, '2019-08-21 16:25:12');
 INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '复式', 12, '朝北', 800, '押一付三', '上海市青浦区崧泽大道 7509 号友和道通', 0, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '复式', 95, '朝东南', 6320, '押一付四', '上海市青浦区崧泽大道 7509 号', 1, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '独栋别墅', 230, '朝南', 63200, '押六付六', '上海市青浦区崧泽大道 7509 号', 1, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '跃式', 125, '朝东', 6500, '押三付二', '上海市青浦区崧泽大道', 1, '2019-08-21 16:25:12');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '复式', 95, '朝东南', 6320, '押一付四', '上海市青浦区崧泽大道 7509 号', 0, '2019-08-21 16:25:12');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '独栋别墅', 230, '朝南', 63200, '押六付六', '上海市青浦区崧泽大道 7509 号', 0, '2019-08-21 16:25:12');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '跃式', 125, '朝东', 6500, '押三付二', '上海市青浦区崧泽大道', 0, '2019-08-21 16:25:12');
 create table apartment_repair
 (
   id         bigint auto_increment
@@ -50,8 +50,8 @@ create table apartment_user
 )
   comment '租户信息' charset = utf8;
 
-INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('test', 2, '17890345673', '243523452', '退伍证', 1, '2019-08-21 15:15:12');
-INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('test1', 1, '17890345672', '6584567', '学生证', 1, '2019-08-21 15:15:12');
+INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('test', 2, '17890345673', '243523452', '退伍证', 1, '2019-09-11 15:12:09');
+INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('test1', 1, '17621966839', '6584567', '学生证', 1, '2019-09-11 22:29:28');
 INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('test', 2, '17890345672', '7465856', '身份证', 0, '2019-08-21 15:15:12');
 INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('良民', 1, '123', '3246734562543', '工作证', 0, '2019-08-21 15:15:12');
 INSERT INTO apartment.apartment_user (name, sex, phone, idNumber, idType, isLive, createtime) VALUES ('潘大佬', 1, '217', '123', '工作证', 0, '2019-08-21 15:15:12');
@@ -69,23 +69,20 @@ create table file
 )
   comment '文件表' charset = utf8;
 
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567391605258297672853.jpg', 'jpg', 12, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567391607190-1046328446.jpg', 'jpg', 12, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/15673916037761566496170.jpg', 'jpg', 12, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567391603317-356352297.jpg', 'jpg', 12, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/15673916033141273699936.jpg', 'jpg', 12, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428590734-222436281.jpg', 'jpg', 13, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428597010-499036550.jpg', 'jpg', 13, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428597207449375115.jpg', 'jpg', 13, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428597260-1909207601.jpg', 'jpg', 13, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428893991-222436281.jpg', 'jpg', 14, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428895050-1909207601.jpg', 'jpg', 14, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428898308-499036550.jpg', 'jpg', 14, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567428899829449375115.jpg', 'jpg', 14, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567429086356-222436281.jpg', 'jpg', 15, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567429087261-1909207601.jpg', 'jpg', 15, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567429088787-376898486.jpg', 'jpg', 15, 2, '');
-INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin1', '/images/1567429091201449375115.jpg', 'jpg', 15, 2, '');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com/15690684835491711613249.jpg', 'jpg', 22, 2, '15690684835491711613249.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//15690732268861273699936.jpg', 'jpg', 23, 2, '15690732268861273699936.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073269628735547696.jpg', 'jpg', 24, 2, '1569073269628735547696.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073361765435217520.jpg', 'jpg', 25, 2, '1569073361765435217520.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073363632-499036550.jpg', 'jpg', 25, 2, '1569073363632-499036550.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073362433-1909207601.jpg', 'jpg', 25, 2, '1569073362433-1909207601.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073366370449375115.jpg', 'jpg', 25, 2, '1569073366370449375115.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073507611-1909207601.jpg', 'jpg', 26, 2, '1569073507611-1909207601.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073509405449375115.jpg', 'jpg', 26, 2, '1569073509405449375115.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073579036-1909207601.jpg', 'jpg', 27, 2, '1569073579036-1909207601.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569073581133449375115.jpg', 'jpg', 27, 2, '1569073581133449375115.jpg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569074205144-1661784688.jpeg', 'jpeg', 28, 2, '1569074205144-1661784688.jpeg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569074205144-1545550495.jpeg', 'jpeg', 28, 2, '1569074205144-1545550495.jpeg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//15690742051672645273.jpeg', 'jpeg', 28, 2, '15690742051672645273.jpeg');
 create table msg_sign
 (
   SignName   varchar(128)                        not null comment '短信签名。'
@@ -179,19 +176,28 @@ create table repairs
   createtime       timestamp   default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '创建时间',
   conductTime      timestamp                             null comment '处理时间',
   hasfile          int         default 0                 not null comment '是否有文件',
-  status           varchar(45) default '未修理'             not null comment '报修状态，默认值：未修理'
+  status           varchar(45) default '未修理'             not null comment '报修状态，默认值：未修理',
+  repairId         bigint      default 0                 not null comment '已领取维修单的售后人员ID'
 )
   comment '报修表' charset = utf8;
 
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 12, '上海市青浦区崧泽大道 7509 号友和道通', '测试', '2019-09-02 10:33:35', null, 1, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', '阿萨德', '2019-09-02 20:49:59', null, 1, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 16, '上海市青浦区崧泽大道', 'sad', '2019-09-02 20:55:01', null, 1, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿斯顿发送到 2', '2019-09-02 20:58:21', '2019-09-03 17:43:40', 1, '进行中');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-03 17:42:57', 0, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-03 17:43:46', 0, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-03 17:40:41', 0, '已完成');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdftest', '2019-09-03 16:32:45', '2019-09-03 17:50:17', 0, '未修理');
-INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-03 16:36:15', '2019-09-03 17:49:36', 0, '进行中');
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 12, '上海市青浦区崧泽大道 7509 号友和道通', '测试', '2019-09-02 10:33:35', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', '阿萨德', '2019-09-02 20:49:59', '2019-09-11 14:33:09', 1, '进行中', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 16, '上海市青浦区崧泽大道', 'sad', '2019-09-02 20:55:01', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿斯顿发送到 2', '2019-09-02 20:58:21', '2019-09-03 17:43:40', 1, '进行中', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 14:32:35', 0, '未修理', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 14:32:18', 0, '进行中', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 18, 'test底子', 'asdf', '2019-09-11 10:12:57', '2019-09-11 09:17:05', 0, '已完成', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdftest', '2019-09-03 16:32:45', '2019-09-11 10:35:26', 0, '未修理', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-11 10:35:20', '2019-09-11 10:41:34', 0, '已完成', 1);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '正式测试应用', '2019-09-21 19:40:21', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '235sdfasdf', '2019-09-21 20:21:27', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'lalalalalalalalalalalala', '2019-09-21 21:40:30', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'jhihuiqwefkjnasdfhiqwke', '2019-09-21 21:41:11', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasd', '2019-09-21 21:42:52', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasdfasdf', '2019-09-21 21:45:14', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'sdfaFKKLFKAS', '2019-09-21 21:46:25', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿姨样子，压迫意义', '2019-09-21 21:56:52', null, 1, '未修理', 0);
 create table repairs_log
 (
   logid            bigint auto_increment
@@ -220,6 +226,22 @@ INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentA
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (20, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-03 16:36:15', '2019-09-03 17:49:14', 0, '未修理');
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (20, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-03 16:36:15', '2019-09-03 17:49:37', 0, '进行中');
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (19, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdftest', '2019-09-03 16:32:45', '2019-09-03 17:50:18', 0, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (18, 2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 09:17:05', 0, '已完成');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (20, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-03 16:36:15', '2019-09-11 10:30:47', 0, '进行中');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (19, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdftest', '2019-09-03 16:32:45', '2019-09-11 10:35:27', 0, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (20, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', 'asdf', '2019-09-11 10:35:20', '2019-09-11 10:41:34', 0, '已完成');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (17, 2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 14:32:11', 0, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (17, 2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 14:32:19', 0, '进行中');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (16, 2, 'admin1', 18, 'test底子', 'asdf', '2019-09-03 16:31:28', '2019-09-11 14:32:36', 0, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (13, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', '阿萨德', '2019-09-02 20:49:59', '2019-09-11 14:33:01', 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (13, 2, 'admin1', 15, '上海市青浦区崧泽大道 7509 号', '阿萨德', '2019-09-02 20:49:59', '2019-09-11 14:33:09', 1, '进行中');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (22, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '235sdfasdf', '2019-09-21 20:21:27', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (23, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'lalalalalalalalalalalala', '2019-09-21 21:40:30', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (24, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'jhihuiqwefkjnasdfhiqwke', '2019-09-21 21:41:11', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (25, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasd', '2019-09-21 21:42:52', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (26, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasdfasdf', '2019-09-21 21:45:14', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (27, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'sdfaFKKLFKAS', '2019-09-21 21:46:25', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (28, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿姨样子，压迫意义', '2019-09-21 21:56:52', null, 1, '未修理');
 create table ums_admin
 (
   id         bigint auto_increment
@@ -240,10 +262,10 @@ create table ums_admin
 create index ums_admin_ums_role_id_fk
   on ums_admin (roleId);
 
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin', '123456', '17621966839', 1, '超级管理员', 1, '2019-10-08 13:32:47', '2019-09-09 16:38:34', 0, 0);
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin1', '123456', '17621966839', 3, '租户', 1, '2019-08-29 05:16:03', '2019-09-09 15:49:02', 2, 0);
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin2', '123456', '17621966839', 4, '售后人员', 1, '2019-08-29 06:19:57', '2019-09-09 15:49:11', 0, 1);
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin3', '123456', '17621966839', 2, '系统管理员', 1, '2019-09-06 12:54:57', '2019-09-09 15:48:53', 0, 0);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin', '123456', '17621966839', 1, '超级管理员', 1, '2019-10-08 13:32:47', '2019-09-21 21:59:26', 0, 0);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin3', '123456', '17621966839', 3, '租户', 1, '2019-08-29 05:16:03', '2019-09-21 21:59:32', 2, 0);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin4', '123456', '17621966839', 4, '售后人员', 1, '2019-08-29 06:19:57', '2019-09-11 14:32:07', 0, 1);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin2', '123456', '17621966839', 2, '系统管理员', 1, '2019-09-06 12:54:57', '2019-09-11 14:37:42', 0, 0);
 create table ums_role
 (
   id          bigint auto_increment

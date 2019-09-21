@@ -99,7 +99,7 @@
 
     <!--  查询所有的支付模式  -->
     <select id="selectPattern" resultType="java.lang.String">
-        select distinct pattern from apartment where status=1
+        select distinct pattern from apartment
     </select>
 
     <!--  查询所有的户型  -->

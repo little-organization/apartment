@@ -61,6 +61,7 @@ public class OSSUploadUtils {
             inputStream =  new ByteArrayInputStream(file.getBytes());
             PutObjectResult putObjectResult = ossClient.putObject(bucketName, firstKeyAddfileName, inputStream);
             System.out.println(JSONObject.toJSONString(putObjectResult.getETag()));
+            return true;
         } catch (OSSException oe) {
             System.out.println("捕获OSSException，这意味着您的请求已发送到OSS，但由于某种原因被拒绝并出现错误响应");
             System.out.println("错误信息: " + oe.getErrorCode());

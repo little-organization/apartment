@@ -33,13 +33,19 @@ import java.util.Map;
 public class FileController {
 
     @Value("${aliyun.firstKey}")
-    private static String firstKey;
+    private String firstKey;
 
     @Autowired
     OSSUploadUtils ossUploadUtils;
 
     @Autowired
     IFileService iFileService;
+
+    InetAddress address;
+
+    public FileController() throws UnknownHostException {
+        address = InetAddress.getLocalHost();
+    }
 
 
     /**
@@ -57,7 +63,7 @@ public class FileController {
             String newName = ossUploadUtils.getFileName(fileName);
             Map<String,String> map = new HashMap<>();
             map.put("suffix",suffix);
-            map.put("resource",firstKey+"/"+newName);
+            map.put("resource","https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//"+newName);
             map.put("filename",newName);
             // 剪裁图片，目前用不到
             if (ossUploadUtils.uploadImage(file, newName)) {
@@ -90,6 +96,7 @@ public class FileController {
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ResponseBody
     @Cacheable
+    @Scope("request")
     public CommonResult image(@RequestBody String image){
         String imgStr = null;
         if (image!=null) {
@@ -122,7 +129,6 @@ public class FileController {
     @RequestMapping(value = "/getHostAddress", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult getHostAddress() throws UnknownHostException {
-        InetAddress address = InetAddress.getLocalHost();
         String upLoadUrl = "http://"+address.getHostAddress()+":"+port+"/apartment/file/baseUpload";
         return CommonResult.success(upLoadUrl);
     }

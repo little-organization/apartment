@@ -167,8 +167,8 @@ export default {
     this.getApartmentList()
   },
   methods: {
-    getHostAddress() {
-      getHostAddress().then((response) => {
+    async getHostAddress() {
+      await getHostAddress().then((response) => {
         this.uploadUrl = response.data
       })
     },
@@ -177,6 +177,7 @@ export default {
       this.repairInfo.username = this.name
       this.listLoading = true
       apartmentListByUserid(this.id).then((response) => {
+        console.log(response)
         this.apartmentList = response.data
         this.listLoading = false
       })
@@ -275,7 +276,7 @@ export default {
     },
     handleRemove(file, fileList) {
       this.fileList = fileList
-      delImage(file.name).then(response => {
+      delImage(file.response.data.filename).then(response => {
         for (const v of this.repairInfo.fileListSave) {
           if (v.name === file.name) {
             const index = this.repairInfo.fileListSave.indexOf(v)
@@ -327,13 +328,13 @@ export default {
       }
       // 对图片进行压缩
       const imgSize = param.size / 1024 / 1024
-      var quarity = 0.23
+      var quarity = 0.18
       if (imgSize > 20) {
-        quarity = 0.2
+        quarity = 0.15
       } else if (imgSize > 10 && imgSize < 20) {
-        quarity = 0.21
+        quarity = 0.16
       } else if (imgSize > 5 && imgSize < 10) {
-        quarity = 0.22
+        quarity = 0.17
       }
       const _this = this
       if (imgSize > 1) {

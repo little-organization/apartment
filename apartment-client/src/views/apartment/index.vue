@@ -483,6 +483,7 @@ export default {
     // 获取支付模式所有类型
     getPatternList() {
       patternList().then(response => {
+        console.log(response)
         this.patternList = response.data
       })
     },

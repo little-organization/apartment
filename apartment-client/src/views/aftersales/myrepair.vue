@@ -174,7 +174,8 @@
 </template>
 
 <script>
-import { fetchList, updateRepair, getImages, image } from '@/api/repairs'
+// image
+import { fetchList, updateRepair, getImages } from '@/api/repairs'
 import { apartmentById } from '@/api/apartment'
 import { userInfoById } from '@/api/apartmentuser'
 import waves from '@/directive/waves' // waves directive
@@ -451,11 +452,12 @@ export default {
       getImages(this.temp.id).then(response => {
         const files = response.data
         for (const v of files) {
-          image(v.resource).then(response => {
-            if (response.data) {
-              this.images.push('data:image/' + v.getFileType + ';base64,' + response.message)
-            }
-          })
+          this.images.unshift(v.resource)
+          // image(v.resource).then(response => {
+          //   if (response.data) {
+          //     this.images.push('data:image/' + v.fileType + ';base64,' + response.message)
+          //   }
+          // })
         }
       })
       this.dialogFileVisible = true

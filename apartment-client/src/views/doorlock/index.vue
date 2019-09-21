@@ -54,7 +54,7 @@
               <span>{{ props.row.guarantee_time_end | parseTime }}</span>
             </el-form-item>
             <el-form-item label="是否支持门磁:">
-              <el-tag :type="props.row.magnet_flag === 0?'info' : ''">{{ props.row.magnet_flag === 0 ? '不支持' : '支持' }}</el-tag>
+              <el-tag :type="props.row.magnet_flag === 0?'info' : ''">{{ props.row.magnet_flag | magnet_flag }}</el-tag>
             </el-form-item>
             <el-form-item label="网关通信状态:">
               <el-tag :type="props.row.node_comu_status === '00'?'success' : 'danger'">{{ props.row.node_comu_status | comu_status }}</el-tag>
@@ -62,7 +62,7 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="lock_no" label="门锁编码">
+      <el-table-column align="center" prop="lock_no" label="门锁编码" :filter-method="filterLock_kind" :filters="lock_kindList" filter-placement="bottom-end">
         <template slot-scope="{row}">
           <span>{{ row.lock_no }}</span>
         </template>
@@ -72,7 +72,7 @@
           <el-button type="text" size="mini">{{ row.address }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="comu_status" label="门锁通信状态">
+      <el-table-column align="center" prop="comu_status" label="门锁通信状态" :filter-method="filterComu_status" :filters="comu_statusList" filter-placement="bottom-end">
         <template slot-scope="{row}">
           <el-tag :type="row.comu_status === '00'?'success' : 'danger'">{{ row.comu_status | comu_status }}</el-tag>
         </template>
@@ -444,10 +444,29 @@ export default {
       } else {
         return '未知'
       }
+    },
+    magnet_flag(val) {
+      if (val === 0) {
+        return '不支持'
+      } else if (val === 1) {
+        return '支持'
+      } else {
+        return '未知'
+      }
     }
   },
   data() {
     return {
+      comu_statusList: [
+        { text: '通信正常', value: '00' },
+        { text: '通信异常', value: '01' }
+      ],
+      lock_kindList: [
+        { text: '一代协议 433 门锁', value: '0' },
+        { text: '蓝牙门锁', value: '1' },
+        { text: '二代协议 433 门锁', value: '3' },
+        { text: '未知', value: null }
+      ],
       tableKey: 0,
       list: null,
       total: 1,
@@ -643,6 +662,13 @@ export default {
           this.$message({ type: 'info', message: '密码若为空，随机生成 6~7 位密码!' })
         }
       }
+    },
+    // 通讯状态过滤
+    filterComu_status(value, row) {
+      return row.comu_status === value
+    },
+    filterLock_kind(value, row) {
+      return row.lock_kind === value
     }
   }
 }

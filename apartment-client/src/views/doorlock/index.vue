@@ -290,13 +290,13 @@
       <el-dialog title="新增自定义密码" :visible.sync="addinnerVisible" append-to-body>
         <el-form ref="pwdForm" :rules="pwdRules" :model="addPwdParams" label-width="170px" label-position="right">
           <el-form-item label="门锁编码:" prop="lock_no">
-            <el-input v-model="addPwdParams.lock_no" disabled placeholder="门锁编码" />
+            <el-input v-model.trim="addPwdParams.lock_no" disabled placeholder="门锁编码" />
           </el-form-item>
           <el-form-item label="门锁密码:" prop="pwd_text">
-            <el-input v-model="addPwdParams.pwd_text" placeholder="门锁密码" @blur="checkPwd()" />
+            <el-input v-model.trim="addPwdParams.pwd_text" placeholder="门锁密码" @blur="checkPwd()" />
           </el-form-item>
           <el-form-item label="是否校验密码相似性:" prop="similarity_check">
-            <el-switch v-model="addPwdParams.similarity_check" active-text="true" inactive-text="false" />
+            <el-switch v-model.trim="addPwdParams.similarity_check" active-text="true" inactive-text="false" />
           </el-form-item>
           <el-form-item label="密码有效期(起):" prop="valid_time_start">
             <el-date-picker v-model="addPwdParams.valid_time_start" type="datetime" />
@@ -305,19 +305,19 @@
             <el-date-picker v-model="addPwdParams.valid_time_end" type="datetime" />
           </el-form-item>
           <el-form-item label="使用人姓名:" prop="pwd_user_name">
-            <el-input v-model="addPwdParams.pwd_user_name" placeholder="使用人姓名" />
+            <el-input v-model.trim="addPwdParams.pwd_user_name" placeholder="使用人姓名" />
           </el-form-item>
           <el-form-item label="使用人手机号:" prop="pwd_user_mobile">
             <el-input v-model="addPwdParams.pwd_user_mobile" placeholder="使用人手机号" />
           </el-form-item>
           <el-form-item label="使用人身份证号:" prop="pwd_user_idcard">
-            <el-input v-model="addPwdParams.pwd_user_idcard" placeholder="二代身份证号" />
+            <el-input v-model.trim="addPwdParams.pwd_user_idcard" placeholder="二代身份证号" />
           </el-form-item>
           <el-form-item label="描述:" prop="description">
-            <el-input v-model="addPwdParams.description" type="textarea" :rows="4" placeholder="长度不能大于 120 个字符" />
+            <el-input v-model.trim="addPwdParams.description" type="textarea" :rows="4" placeholder="长度不能大于 120 个字符" />
           </el-form-item>
           <el-form-item label="辅助信息:" prop="extra">
-            <el-input v-model="addPwdParams.extra" type="textarea" :rows="4" placeholder="长度不能大于 1024 个字符" />
+            <el-input v-model.trim="addPwdParams.extra" type="textarea" :rows="4" placeholder="长度不能大于 1024 个字符" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -338,7 +338,7 @@ import { selectDoorLockList, selectDoorLockDetails, selectDoorLockPwdInfo, chang
 import waves from '@/directive/waves' // waves directive
 import { parseTime, formatTime } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { validatePhoneTwo, validateValueIsEmity } from '@/utils/validate'
+import { validatePhoneTwo, validateValueIsEmity, validateIdNo } from '@/utils/validate'
 
 export default {
   name: 'ComplexTable',
@@ -536,7 +536,8 @@ export default {
         pwd_user_mobile: [
           { required: true, trigger: 'blur', validator: validateValueIsEmity },
           { required: true, trigger: 'blur', validator: validatePhoneTwo }
-        ]
+        ],
+        pwd_user_idcard: [{ required: false, trigger: 'blur', validator: validateIdNo }]
       }
     }
   },

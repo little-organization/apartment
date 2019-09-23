@@ -10,15 +10,16 @@ create table apartment
   pattern    varchar(45)                         null comment '支付模式（如押一付一）',
   address    varchar(255)                        null comment '公寓地址',
   status     int       default 0                 null comment '状态：0->未出租，1->已出租',
-  createtime timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '创建时间'
+  createtime timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '创建时间',
+  lock_no    varchar(45)                         null comment '门锁编码'
 )
   comment '公寓信息' charset = utf8;
 
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (4, '复式', 34, '朝西北', 2300, '押一付四', '深证市友和道通集团', 1, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (2, '复式', 12, '朝北', 800, '押一付三', '上海市青浦区崧泽大道 7509 号友和道通', 0, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '复式', 95, '朝东南', 6320, '押一付四', '上海市青浦区崧泽大道 7509 号', 0, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '独栋别墅', 230, '朝南', 63200, '押六付六', '上海市青浦区崧泽大道 7509 号', 0, '2019-08-21 16:25:12');
-INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime) VALUES (0, '跃式', 125, '朝东', 6500, '押三付二', '上海市青浦区崧泽大道', 0, '2019-08-21 16:25:12');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime, lock_no) VALUES (4, '复式', 34, '朝西北', 2300, '押一付四', '深证市友和道通集团', 1, '2019-09-23 21:54:55', '');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime, lock_no) VALUES (2, '复式', 12, '朝北', 800, '押一付三', '上海市青浦区崧泽大道 7509 号友和道通', 0, '2019-09-23 14:13:21', '11.139.10.67');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime, lock_no) VALUES (0, '复式', 95, '朝东南', 6320, '押一付四', '上海市青浦区崧泽大道 7509 号', 0, '2019-09-23 14:13:21', '10.135.250.45');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime, lock_no) VALUES (0, '独栋别墅', 230, '朝南', 63200, '押六付六', '上海市青浦区崧泽大道 7509 号', 0, '2019-09-23 14:13:21', '10.135.249.146');
+INSERT INTO apartment.apartment (userid, houseType, roomArea, face, price, pattern, address, status, createtime, lock_no) VALUES (0, '跃式', 125, '朝东', 6500, '押三付二', '上海市青浦区崧泽大道', 0, '2019-09-23 14:13:21', '10.12.145.88');
 create table apartment_repair
 (
   id         bigint auto_increment
@@ -65,7 +66,9 @@ create table file
   filetype  varchar(45)  null comment '文件类型',
   repairsid bigint       null comment '报修表 id',
   userid    bigint       null comment '报修租户id',
-  filename  varchar(64)  null comment '文件名称'
+  filename  varchar(64)  null comment '文件名称',
+  constraint file_repairs_id_fk
+    foreign key (repairsid) references repairs (id)
 )
   comment '文件表' charset = utf8;
 
@@ -83,6 +86,7 @@ INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, fil
 INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569074205144-1661784688.jpeg', 'jpeg', 28, 2, '1569074205144-1661784688.jpeg');
 INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569074205144-1545550495.jpeg', 'jpeg', 28, 2, '1569074205144-1545550495.jpeg');
 INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//15690742051672645273.jpeg', 'jpeg', 28, 2, '15690742051672645273.jpeg');
+INSERT INTO apartment.file (username, resource, filetype, repairsid, userid, filename) VALUES ('admin3', 'https://qingmu-images.oss-cn-shenzhen.aliyuncs.com//1569076010193211919192.jpeg', 'jpeg', 29, 2, '1569076010193211919192.jpeg');
 create table msg_sign
 (
   SignName   varchar(128)                        not null comment '短信签名。'
@@ -198,6 +202,7 @@ INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, 
 INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasdfasdf', '2019-09-21 21:45:14', null, 1, '未修理', 0);
 INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'sdfaFKKLFKAS', '2019-09-21 21:46:25', null, 1, '未修理', 0);
 INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿姨样子，压迫意义', '2019-09-21 21:56:52', null, 1, '未修理', 0);
+INSERT INTO apartment.repairs (userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status, repairId) VALUES (2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '据亲们', '2019-09-21 22:26:53', null, 1, '未修理', 0);
 create table repairs_log
 (
   logid            bigint auto_increment
@@ -242,6 +247,7 @@ INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentA
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (26, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'asdfasdfasdf', '2019-09-21 21:45:14', null, 1, '未修理');
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (27, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', 'sdfaFKKLFKAS', '2019-09-21 21:46:25', null, 1, '未修理');
 INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (28, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '阿姨样子，压迫意义', '2019-09-21 21:56:52', null, 1, '未修理');
+INSERT INTO apartment.repairs_log (id, userid, username, apartmentid, apartmentAddress, content, createtime, conductTime, hasfile, status) VALUES (29, 2, 'admin3', 12, '上海市青浦区崧泽大道 7509 号友和道通', '据亲们', '2019-09-21 22:26:53', null, 1, '未修理');
 create table ums_admin
 (
   id         bigint auto_increment
@@ -262,8 +268,8 @@ create table ums_admin
 create index ums_admin_ums_role_id_fk
   on ums_admin (roleId);
 
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin', '123456', '17621966839', 1, '超级管理员', 1, '2019-10-08 13:32:47', '2019-09-21 21:59:26', 0, 0);
-INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin3', '123456', '17621966839', 3, '租户', 1, '2019-08-29 05:16:03', '2019-09-21 21:59:32', 2, 0);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin', '123456', '17621966839', 1, '超级管理员', 1, '2019-10-08 13:32:47', '2019-09-22 18:14:33', 0, 0);
+INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin3', '123456', '17621966839', 3, '租户', 1, '2019-08-29 05:16:03', '2019-09-21 22:26:34', 2, 0);
 INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin4', '123456', '17621966839', 4, '售后人员', 1, '2019-08-29 06:19:57', '2019-09-11 14:32:07', 0, 1);
 INSERT INTO apartment.ums_admin (username, password, phone, roleId, roleNote, status, createTime, loginTime, userId, repairId) VALUES ('admin2', '123456', '17621966839', 2, '系统管理员', 1, '2019-09-06 12:54:57', '2019-09-11 14:37:42', 0, 0);
 create table ums_role

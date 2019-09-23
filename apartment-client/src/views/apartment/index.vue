@@ -1217,10 +1217,12 @@ export default {
     // 添加临时密码
     temporaryPwdHander() {
       this.temporaryPwdParams.lock_no = this.lockPwdList[0].lock_no
-      userInfoById(this.temp.userid).then((response) => {
-        this.userinfo = response.data
-        this.temporaryPwdParams.pwd_user_mobile = this.userinfo.phone
-      })
+      if (this.temp.userid !== null && this.temp.userid.length > 0) {
+        userInfoById(this.temp.userid).then((response) => {
+          this.userinfo = response.data
+          this.temporaryPwdParams.pwd_user_mobile = this.userinfo.phone
+        })
+      }
       this.temporaryPasswordVisible = true
       this.$nextTick(() => {
         this.$refs['temporaryPwdForm'].clearValidate()
@@ -1253,10 +1255,12 @@ export default {
     // 添加自定义密码
     addPwdHander() {
       this.addPwdParams.lock_no = this.lockPwdList[0].lock_no
-      userInfoById(this.temp.userid).then((response) => {
-        this.userinfo = response.data
-        this.addPwdParams.pwd_user_mobile = this.userinfo.phone
-      })
+      if (this.temp.userid !== null && this.temp.userid.length > 0) {
+        userInfoById(this.temp.userid).then((response) => {
+          this.userinfo = response.data
+          this.addPwdParams.pwd_user_mobile = this.userinfo.phone
+        })
+      }
       this.addinnerVisible = true
       this.$nextTick(() => {
         this.$refs['pwdForm'].clearValidate()

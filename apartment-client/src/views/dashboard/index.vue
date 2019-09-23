@@ -54,9 +54,9 @@ export default {
     // 选项卡更改触发
     handleClick(tab, event) {
       if (tab.$el.id === 'pane-0') {
-        console.log(0)
+        console.log()
       } else if (tab.$el.id === 'pane-1') {
-        console.log(1)
+        console.log()
       }
     }
   }

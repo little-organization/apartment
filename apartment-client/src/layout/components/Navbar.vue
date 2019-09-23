@@ -16,12 +16,22 @@
               首页
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+          <router-link to="/">
+            <el-dropdown-item>
+              {{ userInfo.username }}
+            </el-dropdown-item>
+          </router-link>
+          <router-link to="/">
+            <el-dropdown-item>
+              {{ userInfo.roles[0] }}
+            </el-dropdown-item>
+          </router-link>
+          <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>开发文档</el-dropdown-item>
-          </a>
+          </a> -->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
@@ -48,7 +58,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'userInfo'
     ])
   },
   methods: {

@@ -67,4 +67,14 @@ public class DoorLockController {
         AddSelfPwdResponse response = iHuoHeService.changePassword(request);
         return CommonResult.success(response);
     }
+
+    /**
+     * 获取临时密码
+     * */
+    @RequestMapping(value = "/temporaryPassword",method = RequestMethod.POST)
+    public @ResponseBody
+    CommonResult temporaryPassword(@RequestBody TemporaryPasswordRequest request) throws Exception {
+        TemporaryPasswordResponse response = iHuoHeService.temporaryPassword(request);
+        return CommonResult.success(response);
+    }
 }

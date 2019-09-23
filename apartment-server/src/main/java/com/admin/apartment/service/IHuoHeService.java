@@ -25,4 +25,9 @@ public interface IHuoHeService {
      * 新增自定义密码
      * */
     AddSelfPwdResponse changePassword(AddSelfPwdRequest request);
+
+    /**
+     * 获取临时密码
+     * */
+    TemporaryPasswordResponse temporaryPassword(TemporaryPasswordRequest request);
 }

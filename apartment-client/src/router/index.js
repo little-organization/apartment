@@ -114,17 +114,17 @@ export const asyncRoutes = [
     }]
   },
 
-  {
-    path: '/check',
-    component: Layout,
-    redirect: '/check',
-    children: [{
-      path: 'check',
-      name: '视频查看',
-      component: () => import('@/views/components-demo/videoplayer'),
-      meta: { title: '视频查看', icon: 'form', roles: ['超级管理员'] }
-    }]
-  },
+  // {
+  //   path: '/check',
+  //   component: Layout,
+  //   redirect: '/check',
+  //   children: [{
+  //     path: 'check',
+  //     name: '视频查看',
+  //     component: () => import('@/views/components-demo/videoplayer'),
+  //     meta: { title: '视频查看', icon: 'form', roles: ['超级管理员'] }
+  //   }]
+  // },
 
   {
     path: '/reportrepair',

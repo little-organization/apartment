@@ -82,4 +82,9 @@ public class ApartmentParams {
      * 租户姓名
      */
     private String username;
+
+    /**
+     * 门锁编码
+     * */
+    private String lock_no;
 }

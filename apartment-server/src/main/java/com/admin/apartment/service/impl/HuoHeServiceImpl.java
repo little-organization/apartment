@@ -54,6 +54,10 @@ public class HuoHeServiceImpl implements IHuoHeService {
             String result = null;
             try {
                 result = doPost("/lock/list",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                if (result==null) {
+                    loginHuoHe();
+                    result = doPost("/lock/list",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                }
                 LOGGER.info("红河对接查询门锁列表结果"+result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -79,6 +83,10 @@ public class HuoHeServiceImpl implements IHuoHeService {
             String result = null;
             try {
                 result = doPost("/lock/view",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                if (result==null) {
+                    loginHuoHe();
+                    result = doPost("/lock/view",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                }
                 LOGGER.info("红河对接查询门锁详情结果"+result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -86,6 +94,10 @@ public class HuoHeServiceImpl implements IHuoHeService {
             BaseResponse response = JSONObject.parseObject(result,BaseResponse.class);
             if("HH0000".equals(response.getRlt_code())){
                 lockListResponse = JSONObject.parseObject(JSONObject.toJSONString(response.getData()), LockViewResponse.class);
+            }else{
+                lockListResponse = new LockViewResponse();
+                lockListResponse.setComu_status("false");
+                lockListResponse.setDescription(response.getRlt_msg());
             }
         }
         return lockListResponse;
@@ -104,6 +116,10 @@ public class HuoHeServiceImpl implements IHuoHeService {
             String result = null;
             try {
                 result = doPost("/pwd/list",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                if (result==null) {
+                    loginHuoHe();
+                    result = doPost("/pwd/list",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                }
                 LOGGER.info("红河对接查询门锁密码信息结果"+result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -129,6 +145,10 @@ public class HuoHeServiceImpl implements IHuoHeService {
             String result = null;
             try {
                 result = doPost("/pwd/add",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                if (result==null) {
+                    loginHuoHe();
+                    result = doPost("/pwd/add",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                }
                 LOGGER.info("红河对接查询门锁密码信息结果"+result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -136,9 +156,46 @@ public class HuoHeServiceImpl implements IHuoHeService {
             BaseResponse response = JSONObject.parseObject(result,BaseResponse.class);
             if("HH0000".equals(response.getRlt_code())){
                 addSelfPwdResponse = JSONObject.parseObject(JSONObject.toJSONString(response.getData()), AddSelfPwdResponse.class);
+            }else{
+                addSelfPwdResponse = new AddSelfPwdResponse();
+                addSelfPwdResponse.setPwd_no("false");
+                addSelfPwdResponse.setPwd_text(response.getRlt_msg());
             }
         }
         return addSelfPwdResponse;
+    }
+
+    /**
+     * 获取临时密码
+     * */
+    @Override
+    public TemporaryPasswordResponse temporaryPassword(TemporaryPasswordRequest request){
+        TemporaryPasswordResponse temporaryPasswordResponse = null;
+        if (ACCESS_TOKEN.isEmpty()){
+            loginHuoHe();
+        }
+        if (!ACCESS_TOKEN.isEmpty()){
+            String result = null;
+            try {
+                result = doPost("/pwd/temporary_pwd",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                if (result==null) {
+                    loginHuoHe();
+                    result = doPost("/pwd/temporary _pwd",JSONObject.parseObject(JSONObject.toJSONString(request)),ACCESS_TOKEN);
+                }
+                LOGGER.info("红河对接查询门锁密码信息结果"+result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            BaseResponse response = JSONObject.parseObject(result,BaseResponse.class);
+            if("HH0000".equals(response.getRlt_code())){
+                temporaryPasswordResponse = JSONObject.parseObject(JSONObject.toJSONString(response.getData()), TemporaryPasswordResponse.class);
+            }else{
+                temporaryPasswordResponse = new TemporaryPasswordResponse();
+                temporaryPasswordResponse.setPwd_no("false");
+                temporaryPasswordResponse.setPwd_text(response.getRlt_msg());
+            }
+        }
+        return temporaryPasswordResponse;
     }
 
     /**

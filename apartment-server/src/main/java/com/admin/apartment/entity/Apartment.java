@@ -73,4 +73,8 @@ public class Apartment implements Serializable {
      */
     private LocalDateTime createtime;
 
+    /**
+     * 门锁编码
+     * */
+    private String lock_no;
 }

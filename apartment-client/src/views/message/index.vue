@@ -132,8 +132,9 @@
           </el-table-column>
           <el-table-column label="响应信息" prop="message" align="center">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="light" content="点击查看详细信息" placement="top">
-                <el-button type="text" size="mini" @click="detailMsg(scope.row)">{{ scope.row.message }}</el-button>
+              <el-button type="text" size="mini" @click="detailMsg(scope.row)">{{ scope.row.message }}</el-button>
+              <el-tooltip class="item" effect="light" content="点击查看详细信息" placement="right">
+                <el-button type="success" size="mini" @click="detailMsg(scope.row)">详情</el-button>
               </el-tooltip>
             </template>
           </el-table-column>

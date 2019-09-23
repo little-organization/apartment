@@ -43,12 +43,12 @@ public interface IApartmentService extends IService<Apartment> {
     /**
      * 创建公寓信息
      * */
-    boolean createApartment(Apartment apartment);
+    boolean createApartment(Apartment apartment) throws Exception;
 
     /**
      * 更新公寓信息
      * */
-    boolean updateApartment(Apartment apartment);
+    boolean updateApartment(Apartment apartment) throws Exception;
 
     /**
      * 删除公寓信息

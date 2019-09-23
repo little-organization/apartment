@@ -25,6 +25,11 @@
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="账号密码" prop="password" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.password }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="手机号码" prop="phone" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>

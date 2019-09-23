@@ -112,7 +112,7 @@ public class HttpURLConnectionUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return e.getLocalizedMessage();
         } finally {
             if (outputStreamWriter != null) {
                 outputStreamWriter.close();

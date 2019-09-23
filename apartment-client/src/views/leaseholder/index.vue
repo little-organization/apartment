@@ -215,7 +215,7 @@ export default {
           { trigger: 'blur', validator: validatePhoneTwo }
         ],
         idType: [{ required: true, message: '租户证件必填', trigger: 'change' }],
-        idNumber: [{ required: true, message: '租户证件必填', trigger: 'blur' }]
+        idNumber: [{ required: true, message: '租户证件号码必填', trigger: 'blur' }]
       },
       downloadLoading: false
     }

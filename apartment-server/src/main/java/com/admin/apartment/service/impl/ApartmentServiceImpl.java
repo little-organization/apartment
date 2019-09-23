@@ -7,7 +7,10 @@ import com.admin.apartment.mapper.UserMapper;
 import com.admin.apartment.model.ApartmentParams;
 import com.admin.apartment.model.FiltersTag;
 import com.admin.apartment.model.MyPage;
+import com.admin.apartment.model.huohe.LockViewRequest;
+import com.admin.apartment.model.huohe.LockViewResponse;
 import com.admin.apartment.service.IApartmentService;
+import com.admin.apartment.service.IHuoHeService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -37,6 +40,9 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    IHuoHeService iHuoHeService;
 
     @Override
     public Page<Apartment> selectApartmentByLike(ApartmentParams apartmentParams) {
@@ -78,7 +84,17 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
     }
 
     @Override
-    public boolean createApartment(Apartment apartment) {
+    @Transactional(rollbackFor=Exception.class)
+    public boolean createApartment(Apartment apartment) throws Exception {
+        // 检查门锁编码是否可用
+        if (apartment.getLock_no()!=null && apartment.getLock_no().length() >0 ) {
+            LockViewRequest request = new LockViewRequest();
+            request.setLock_no(apartment.getLock_no());
+            LockViewResponse response = iHuoHeService.selectDoorLockDetails(request);
+            if ("false".equals(response.getComu_status())){
+                throw new Exception("门锁编码不存在，请仔细查看门锁编码！");
+            }
+        }
         //获取数据户型 List
         boolean result = apartmentMapper.insert(apartment)>0;
         return result;
@@ -86,7 +102,16 @@ public class ApartmentServiceImpl extends ServiceImpl<ApartmentMapper, Apartment
 
     @Override
     @Transactional(rollbackFor=Exception.class)
-    public boolean updateApartment(Apartment apartment) {
+    public boolean updateApartment(Apartment apartment) throws Exception {
+        // 检查门锁编码是否可用
+        if (apartment.getLock_no()!=null && apartment.getLock_no().length() >0 ) {
+            LockViewRequest request = new LockViewRequest();
+            request.setLock_no(apartment.getLock_no());
+            LockViewResponse response = iHuoHeService.selectDoorLockDetails(request);
+            if ("false".equals(response.getComu_status())){
+                throw new Exception("门锁编码不存在，请仔细查看门锁编码！");
+            }
+        }
         //获取数据户型 List
         Apartment apartment1 = apartmentMapper.selectById(apartment.getId());
         if(apartment1.getUserid()!=apartment.getUserid()){

@@ -93,6 +93,9 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="t.lock_no != null">
+                and lock_no like '%${t.lock_no}%'
+            </if>
             order by createtime desc
         </where>
     </select>

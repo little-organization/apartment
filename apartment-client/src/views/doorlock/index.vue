@@ -160,17 +160,12 @@
       </div>
       <div>
         <el-tag type="success">
-          门锁通信状态更新：{{ lockDetail.comu_status_update_time | parseTime }}
-        </el-tag>
-      </div>
-      <div>
-        <el-tag type="info">
-          门锁通信状态：{{ lockDetail.comu_status | comu_status }}
+          门锁通信状态更新时间：{{ lockDetail.comu_status_update_time | parseTime }}
         </el-tag>
       </div>
       <div>
         <el-tag type="warning">
-          门锁接收到的锁信号强度：{{ lockDetail.rssi }}0~4:信号强度 -1:未上报信号强度
+          门锁接收到的锁信号强度：{{ lockDetail.rssi }}（0~4:信号强度，-1:未上报信号强度）
         </el-tag>
       </div>
       <div>
@@ -237,9 +232,6 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand" label-width="130px">
-              <el-form-item label="密码:">
-                <el-tag>{{ props.row.pwd_text }}</el-tag>
-              </el-form-item>
               <el-form-item label="使用人姓名:">
                 <el-tag type="success">{{ props.row.pwd_user_name }}</el-tag>
               </el-form-item>
@@ -283,9 +275,38 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button v-waves type="primary" icon="el-icon-refresh" @click="refreshPwdInfo()">刷新</el-button>
+        <el-button v-waves type="primary" @click="temporaryPwdHander()">获取临时密码</el-button>
         <el-button v-waves type="primary" @click="addPwdHander()">新增自定义密码</el-button>
         <el-button v-waves @click="dialogPwdVisible = false">关 闭</el-button>
       </span>
+      <!-- 内层 dialog 获取临时密码 -->
+      <el-dialog title="获取临时密码" :visible.sync="temporaryPasswordVisible" append-to-body>
+        <el-form ref="temporaryPwdForm" :rules="temporaryPwdRules" :model="temporaryPwdParams" label-width="170px" label-position="right">
+          <el-form-item label="门锁编码:" prop="lock_no">
+            <el-input v-model.trim="temporaryPwdParams.lock_no" disabled placeholder="门锁编码" />
+          </el-form-item>
+          <el-form-item label="使用人姓名:" prop="pwd_user_name">
+            <el-input v-model.trim="temporaryPwdParams.pwd_user_name" placeholder="使用人姓名" />
+          </el-form-item>
+          <el-form-item label="使用人手机号:" prop="pwd_user_mobile">
+            <el-input v-model="temporaryPwdParams.pwd_user_mobile" placeholder="使用人手机号" />
+          </el-form-item>
+          <el-form-item label="使用人身份证号:" prop="pwd_user_idcard">
+            <el-input v-model.trim="temporaryPwdParams.pwd_user_idcard" placeholder="二代身份证号" />
+          </el-form-item>
+          <el-form-item label="描述:" prop="description">
+            <el-input v-model.trim="temporaryPwdParams.description" type="textarea" :rows="4" placeholder="长度不能大于 120 个字符" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button v-waves @click="temporaryPasswordVisible = false">
+            取消
+          </el-button>
+          <el-button v-waves type="primary" @click="temporaryPassword('temporaryPwdForm')">
+            确认添加
+          </el-button>
+        </div>
+      </el-dialog>
       <!-- 内层 dialog 新增自定义密码 -->
       <el-dialog title="新增自定义密码" :visible.sync="addinnerVisible" append-to-body>
         <el-form ref="pwdForm" :rules="pwdRules" :model="addPwdParams" label-width="170px" label-position="right">
@@ -334,7 +355,7 @@
 </template>
 
 <script>
-import { selectDoorLockList, selectDoorLockDetails, selectDoorLockPwdInfo, changePassword } from '@/api/doorlock'
+import { selectDoorLockList, selectDoorLockDetails, selectDoorLockPwdInfo, changePassword, temporaryPassword } from '@/api/doorlock'
 import waves from '@/directive/waves' // waves directive
 import { parseTime, formatTime } from '@/filters'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -513,6 +534,24 @@ export default {
       listPwdLoading: false,
       dialogPwdVisible: false,
       lock_type: null,
+      // 临时密码
+      temporaryPasswordVisible: false,
+      temporaryPwdParams: {
+        lock_no: null,
+        pwd_user_name: null,
+        pwd_user_mobile: null,
+        pwd_user_idcard: null,
+        description: null
+      },
+      temporaryPwdRules: {
+        lock_no: [{ required: true, message: '门锁编码必填', trigger: 'blur' }],
+        description: [{ min: 0, max: 120, message: '描述长度只能在在 3 到 120 个字符之间', trigger: 'blur' }],
+        pwd_user_mobile: [
+          { required: true, trigger: 'blur', validator: validateValueIsEmity },
+          { required: true, trigger: 'blur', validator: validatePhoneTwo }
+        ],
+        pwd_user_idcard: [{ required: false, trigger: 'blur', validator: validateIdNo }]
+      },
       // 新增自定义密码
       addinnerVisible: false,
       addPwdParams: {
@@ -553,7 +592,6 @@ export default {
     getList() {
       this.listLoading = true
       selectDoorLockList(this.listQuery).then(response => {
-        console.log(response)
         if (response.data.rows === null || response.data.total === 0) {
           this.$notify({
             title: '成功',
@@ -569,8 +607,7 @@ export default {
           this.total = response.data.total
           this.listLoading = false
         }
-      }).catch((error) => {
-        console.log(error)
+      }).catch(() => {
         this.$notify({
           title: '失败',
           message: '请求失败，请查看搜索参数是否正确！',
@@ -582,6 +619,10 @@ export default {
     },
     // 获取门锁详情的数据
     getDetails(row) {
+      if (row.lock_no === this.lockDetail.lock_no) {
+        this.dialogVisible = true
+        return false
+      }
       var detailsrequest = {
         lock_no: row.lock_no
       }
@@ -592,22 +633,59 @@ export default {
     },
     // 获取门锁密码的数据
     getPwdInfo(row) {
+      if (this.lockPwdList.length > 0 && this.lockPwdList[0].lock_no === row.lock_no) {
+        this.dialogPwdVisible = true
+        return false
+      }
+      this.listPwdLoading = true
       this.lock_type = row.lock_kind
       var detailsrequest = {
         lock_no: row.lock_no
       }
       selectDoorLockPwdInfo(detailsrequest).then(response => {
+        this.listPwdLoading = false
         this.dialogPwdVisible = true
         this.lockPwdList = response.data
       })
     },
     // 刷新门锁信息
     refreshPwdInfo() {
+      this.listPwdLoading = true
       var detailsrequest = {
         lock_no: this.lockPwdList[0].lock_no
       }
       selectDoorLockPwdInfo(detailsrequest).then(response => {
         this.lockPwdList = response.data
+        this.listPwdLoading = false
+      })
+    },
+    // 添加临时密码
+    temporaryPwdHander() {
+      this.temporaryPwdParams.lock_no = this.lockPwdList[0].lock_no
+      this.temporaryPasswordVisible = true
+    },
+    // 给门锁添加临时密码
+    temporaryPassword(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          temporaryPassword(this.temporaryPwdParams).then((response) => {
+            const result = response.data
+            if (result.pwd_no === 'false') {
+              this.$message({ type: 'error', message: result.pwd_text + '，请联系火河科技门锁对接人员，或稍后重试!' })
+            } else {
+              this.$message({ type: 'success', message: '获取临时密码成功，请【刷新】密码信息查看!' })
+              this.temporaryPasswordVisible = false
+              this.refreshPwdInfo()
+            }
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '获取临时密码异常，请重试!'
+            })
+          })
+        } else {
+          return false
+        }
       })
     },
     // 添加自定义密码
@@ -619,20 +697,22 @@ export default {
     addPassword(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log(this.addPwdParams.valid_time_start, this.addPwdParams.valid_time_end)
           if (this.addPwdParams.valid_time_start > this.addPwdParams.valid_time_end) {
             this.$message({ type: 'error', message: '密码有效期（止）小于 密码有效期（起）!' })
             return false
           }
+          if (!this.checkPwd()) {
+            return false
+          }
           changePassword(this.addPwdParams).then((response) => {
             const result = response.data
-            if (result === null) {
-              this.$message({ type: 'error', message: '添加自定义密码失败，请重试!' })
+            if (result.pwd_no === 'false') {
+              this.$message({ type: 'error', message: result.pwd_text + '，请联系火河科技门锁对接人员，或稍后重试!' })
             } else {
               this.$message({ type: 'success', message: '添加自定义密码成功，请稍后【刷新】密码信息查看!' })
               this.addinnerVisible = false
+              this.refreshPwdInfo()
             }
-            this.insertTemplate.TemplateCode = null
           }).catch(() => {
             this.$message({
               type: 'info',
@@ -650,17 +730,21 @@ export default {
         if (this.addPwdParams.pwd_text !== null && this.addPwdParams.pwd_text.length !== 0) {
           if (!(this.addPwdParams.pwd_text.length >= 6 && this.addPwdParams.pwd_text.length <= 16)) {
             this.$message({ type: 'error', message: '蓝牙门锁需要 6~16 位密码!' })
+            return false
           }
         } else {
           this.$message({ type: 'info', message: '密码若为空，随机生成 6~7 位密码!' })
+          return true
         }
       } else {
         if (this.addPwdParams.pwd_text !== null && this.addPwdParams.pwd_text.length !== 0) {
           if (!(this.addPwdParams.pwd_text.length >= 4 && this.addPwdParams.pwd_text.length <= 16)) {
             this.$message({ type: 'error', message: '433门锁需要 4~16 位密码!' })
+            return false
           }
         } else {
           this.$message({ type: 'info', message: '密码若为空，随机生成 6~7 位密码!' })
+          return true
         }
       }
     },

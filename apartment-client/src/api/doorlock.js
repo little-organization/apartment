@@ -44,3 +44,14 @@ export function changePassword(params) {
   })
 }
 
+export function temporaryPassword(params) {
+  return request({
+    url: '/doorlock/temporaryPassword',
+    method: 'post',
+    data: params,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
+

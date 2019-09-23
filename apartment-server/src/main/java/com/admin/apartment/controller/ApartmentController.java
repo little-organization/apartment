@@ -87,7 +87,7 @@ public class ApartmentController {
      * */
     @RequestMapping(value = "/createApartment",method = RequestMethod.POST)
     public @ResponseBody
-    CommonResult createApartment(@RequestBody Apartment apartment){
+    CommonResult createApartment(@RequestBody Apartment apartment) throws Exception {
         boolean result = iApartmentService.createApartment(apartment);
         return CommonResult.success(result);
     }
@@ -97,7 +97,7 @@ public class ApartmentController {
      * */
     @RequestMapping(value = "/updateApartment",method = RequestMethod.POST)
     public @ResponseBody
-    CommonResult updateApartment(@RequestBody Apartment apartment){
+    CommonResult updateApartment(@RequestBody Apartment apartment) throws Exception {
         boolean result = iApartmentService.updateApartment(apartment);
         return CommonResult.success(result);
     }

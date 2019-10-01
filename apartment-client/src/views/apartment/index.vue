@@ -23,6 +23,7 @@
     </div>
 
     <el-table
+      ref="table"
       :key="tableKey"
       v-loading="listLoading"
       :data="list"
@@ -31,6 +32,8 @@
       stripe
       highlight-current-row
       style="width: 100%;"
+      :row-key="getRowKeys"
+      :expand-row-keys="openRowKey"
       @filter-change="filterHanderChange"
       @expand-change="openDetailLock"
     >
@@ -726,7 +729,9 @@ export default {
           { required: true, trigger: 'blur', validator: validatePhoneTwo }
         ],
         pwd_user_idcard: [{ required: false, trigger: 'blur', validator: validateIdNo }]
-      }
+      },
+      // 要展开的行，数值的元素是row的key值
+      openRowKey: null
     }
   },
   created() {
@@ -1164,7 +1169,11 @@ export default {
       }
       this.getList()
     },
-    openDetailLock(row, expandedRows) {
+    getRowKeys(row) {
+      return row.id
+    },
+    openDetailLock(row) {
+      this.openRowKey = [row.id]
       this.getDetails(row)
     },
     // 获取门锁详情的数据

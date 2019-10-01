@@ -731,7 +731,7 @@ export default {
         pwd_user_idcard: [{ required: false, trigger: 'blur', validator: validateIdNo }]
       },
       // 要展开的行，数值的元素是row的key值
-      openRowKey: null
+      openRowKey: []
     }
   },
   created() {
@@ -1173,7 +1173,11 @@ export default {
       return row.id
     },
     openDetailLock(row) {
-      this.openRowKey = [row.id]
+      if (this.openRowKey[0] === row.id) {
+        this.openRowKey = []
+      } else {
+        this.openRowKey = [row.id]
+      }
       this.getDetails(row)
     },
     // 获取门锁详情的数据

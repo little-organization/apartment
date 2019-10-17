@@ -194,8 +194,6 @@ export default {
       this.repairInfo = {
         userid: null,
         username: null,
-        apartmentid: null,
-        apartmentAddress: null,
         content: null
       }
     },

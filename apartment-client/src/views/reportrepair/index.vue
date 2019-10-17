@@ -50,18 +50,28 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="维修状态" prop="status" column-key="status" align="center" :filter-method="filterStatus" :filters="statusList" filter-placement="bottom-end">
+      <!-- <el-table-column label="维修状态" prop="status" column-key="status" align="center" :filter-method="filterStatus" :filters="statusList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.status }}</el-tag>
         </template>
+      </el-table-column> -->
+      <el-table-column label="维修状态" prop="status" column-key="status" width="110px" align="center" :filter-method="filterStatus" :filters="statusList" filter-placement="bottom-left">
+        <template slot-scope="scope">
+          <el-tooltip v-if="checkPermission(['超级管理员'])" class="item" effect="light" content="点击更改修理状态" placement="right">
+            <el-button type="success" size="mini" close-transition @click.native="changeRepairStatus(scope.row)">
+              <span>{{ scope.row.status }}</span>
+            </el-button>
+          </el-tooltip>
+          <el-tag v-else>{{ scope.row.status }}</el-tag>
+        </template>
       </el-table-column>
-      <el-table-column label="领取任务" prop="repairId" column-key="repairId" align="center" :filter-multiple="false" :filter-method="filterRepairId" :filters="repairIdList" filter-placement="bottom-end">
+      <!-- <el-table-column label="领取任务" prop="repairId" column-key="repairId" align="center" :filter-multiple="false" :filter-method="filterRepairId" :filters="repairIdList" filter-placement="bottom-end">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="light" :content="scope.row.repairId === 0 ? '点击领取任务(仅售后人员)' : '任务已领取,点击查看售后人员信息' " placement="top">
             <el-button :type="scope.row.repairId === 0 ? 'info' : 'success'" size="mini" @click="scope.row.repairId === 0 ? changeRepairIdInRepairs(scope.row) : watchUserData(scope.row, 2)">{{ scope.row.repairId === 0 ? '未领取' : '已领取' }}</el-button>
           </el-tooltip>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="创建时间" prop="createtime" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createtime | parseTime }}</span>
@@ -76,6 +86,26 @@
 
     <!-- 分页插件 -->
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <!-- 修改报修状态 -->
+    <el-dialog title="更改维修状态" :visible.sync="dialogStatusVisible">
+      <el-form ref="userForm" :model="temp" label-position="center" label-width="37%">
+        <el-form-item label="请选择状态:" prop="status">
+          <el-select v-model="temp.status" placeholder="请选择状态">
+            <el-option v-for="item in statusList" :key="item.text" :label="item.value" :value="item.value">
+              <span style="float: left">{{ item.value }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogStatusVisible = false">
+          取消
+        </el-button>
+        <el-button :disabled="confirmUpdate" type="primary" @click="updateRepairStatusData()">
+          确认修改
+        </el-button>
+      </div>
+    </el-dialog>
     <!-- 租户信息查看 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogUserVisible">
       <el-table v-if="userinfo!=null" v-loading="userLoading" :data="[userinfo]" border fit highlight-current-row>
@@ -408,7 +438,7 @@ export default {
           for (const v of this.list) {
             if (v.id === this.temp.id) {
               const index = this.list.indexOf(v)
-              this.temp.conductTime = new Date()
+              this.temp.conductTime = new Date().getTime()
               this.list.splice(index, 1, this.temp)
               break
             }
@@ -457,6 +487,46 @@ export default {
           duration: 2000
         })
       }
+    },
+    // 修改维修状态的先决判断
+    changeRepairStatus(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatusVisible = true
+    },
+    // 执行更改维修状态方法
+    updateRepairStatusData() {
+      if (this.confirmUpdate) {
+        return
+      }
+      this.confirmUpdate = true
+      updateRepair(this.temp).then((response) => {
+        const result = response.data
+        if (result) {
+          for (const v of this.list) {
+            if (v.id === this.temp.id) {
+              const index = this.list.indexOf(v)
+              this.temp.conductTime = new Date().getTime()
+              this.list.splice(index, 1, this.temp)
+              break
+            }
+          }
+          this.dialogStatusVisible = false
+          this.$notify({
+            title: '成功',
+            message: '更新成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '更新失败',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      })
+      this.confirmUpdate = false
     },
     watchApartmentData(row) {
       this.apartmentLoading = true

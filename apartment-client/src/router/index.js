@@ -102,17 +102,17 @@ export const asyncRoutes = [
     }]
   },
 
-  {
-    path: '/aftersales',
-    component: Layout,
-    redirect: '/aftersales',
-    children: [{
-      path: 'aftersales',
-      name: '维修人员',
-      component: () => import('@/views/aftersales/index'),
-      meta: { title: '维修人员', icon: 'people', roles: ['超级管理员', '系统管理员'] }
-    }]
-  },
+  // {
+  //   path: '/aftersales',
+  //   component: Layout,
+  //   redirect: '/aftersales',
+  //   children: [{
+  //     path: 'aftersales',
+  //     name: '维修人员',
+  //     component: () => import('@/views/aftersales/index'),
+  //     meta: { title: '维修人员', icon: 'people', roles: ['超级管理员', '系统管理员'] }
+  //   }]
+  // },
 
   // {
   //   path: '/check',

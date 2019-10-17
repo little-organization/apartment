@@ -6,9 +6,9 @@
       <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <!-- <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         添加系统管理员
-      </el-button>
+      </el-button> -->
     </div>
 
     <el-table

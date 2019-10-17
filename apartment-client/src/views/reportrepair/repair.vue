@@ -190,13 +190,6 @@ export default {
       this.repairInfo.apartmentAddress = val.address
       this.stepActive = 1
     },
-    resetRepairInfo() {
-      this.repairInfo = {
-        userid: null,
-        username: null,
-        content: null
-      }
-    },
     // 提交
     pushRepairInfo() {
       this.$refs['dataForm'].validate((valid) => {
@@ -216,7 +209,7 @@ export default {
             addRepairAndFile(this.repairInfo).then(response => {
               // 成功后清空现有数据
               if (response.data) {
-                this.resetRepairInfo()
+                this.repairInfo.content = null
                 this.repairInfo.fileListSave = []
                 this.contentText = ''
                 this.$refs.uploadPic.clearFiles()
